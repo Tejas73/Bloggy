@@ -6,12 +6,13 @@ import userRoute from './routes/user'
 import blogRoute from './routes/blog'
 import commentRoute from './routes/comment'
 import prisma from './utils/prismaClient';
+import bodyParser from 'body-parser';
 
 
 passport.use(jwtStrategy);
 
 const app = express();
-
+app.use(bodyParser.json());
 // Middleware to parse cookies
 app.use(cookieParser());
 
@@ -29,9 +30,9 @@ async function checkDatabaseConnection() {
 }
 
 // Define your routes here...
-app.use('./api/user', userRoute)
-app.use('./api/blog', blogRoute)
-app.use('./api/comment', commentRoute);
+app.use('/api/user', userRoute)
+app.use('/api/blog', blogRoute)
+app.use('/api/comment', commentRoute);
 
 (async () => {
     await checkDatabaseConnection();

@@ -20,6 +20,7 @@ interface ProfileFields{
 }
 
 router.post("/signup", async (req:express.Request<{},{},UserFields>, res:express.Response) => {
+    console.log(req.body)
     const { email, password } = req.body;
     const hashedPassword = await hashPassword(password);
     if (hashedPassword === null) {
