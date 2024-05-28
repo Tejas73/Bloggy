@@ -7,6 +7,8 @@ import blogRoute from './routes/blog'
 import commentRoute from './routes/comment'
 import prisma from './utils/prismaClient';
 import bodyParser from 'body-parser';
+import 'dotenv/config';
+import cors from 'cors';
 
 
 passport.use(jwtStrategy);
@@ -15,7 +17,10 @@ const app = express();
 app.use(bodyParser.json());
 // Middleware to parse cookies
 app.use(cookieParser());
-
+app.use(cors({
+    origin: "http://localhost:5173", 
+    credentials: true 
+}));
 // Initialize Passport
 app.use(passport.initialize());
 
@@ -27,7 +32,7 @@ async function checkDatabaseConnection() {
         console.error("Error connecting to database:", error);
         process.exit(1); // Exit the application if connection fails
     }
-}
+}   
 
 // Define your routes here...
 app.use('/api/user', userRoute)

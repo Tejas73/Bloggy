@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 
 const router = express.Router();
 
-interface BlogTypes{
+interface BlogTypes{  
     title: string,
     description:string
 }
@@ -29,6 +29,7 @@ router.post("/createBlog", passport.authenticate("jwt", { session: false }), asy
     }
 })
 
+//user's personal blogs
 router.get("/myBlogs", passport.authenticate("jwt", { session: false }), async (req:express.Request, res:express.Response) => {
     try {
         const myBlog = await prisma.blog.findMany({
@@ -42,6 +43,8 @@ router.get("/myBlogs", passport.authenticate("jwt", { session: false }), async (
         console.error("Error getting a blog: ", error)
     }
 })
+
+// all the damn blogs
 router.get("/allBlogs", passport.authenticate("jwt", { session: false }), async (req:express.Request, res:express.Response) => {
     try {
         const showBlogs = await prisma.blog.findMany({})
@@ -51,12 +54,13 @@ router.get("/allBlogs", passport.authenticate("jwt", { session: false }), async 
     }
 })
 
-router.put("/updateMyBlog", passport.authenticate("jwt", { session: false }), async (req:express.Request<{},{},BlogTypes>, res:express.Response) => {
+router.put("/updateMyBlog/:id", passport.authenticate("jwt", { session: false }), async (req:express.Request<{id:string},{},BlogTypes>, res:express.Response) => {
     try {
+        const blogId = req.params.id
         const { title, description } = req.body
-        const updatedBlog = await prisma.blog.updateMany({
+        const updatedBlog = await prisma.blog.update({
             where: {
-                authorId: (req.user as User).id
+                id: blogId
             },
             data: {
                 title: title,

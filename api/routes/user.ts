@@ -1,25 +1,30 @@
 //convert into ts
 import express from 'express';
 import prisma from '../utils/prismaClient';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { hashPassword } from '../utils/hashPswrd';
 import passport from 'passport';
 import { User } from '@prisma/client';
 
+
 const router = express.Router()
 
-interface UserFields{
+interface UserFields {
     email: string,
-    password: string
+    password: string,
+    profile: {
+        name: string,
+        bio: string
+    }
 }
 
-interface ProfileFields{
+interface ProfileFields {
     name: string,
     bio: string
 }
 
-router.post("/signup", async (req:express.Request<{},{},UserFields>, res:express.Response) => {
+router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     console.log(req.body)
     const { email, password } = req.body;
     const hashedPassword = await hashPassword(password);
@@ -27,20 +32,29 @@ router.post("/signup", async (req:express.Request<{},{},UserFields>, res:express
         return res.status(500).json({ error: "Error hashing password, possibly null" })
     }
     try {
+        console.log(hashedPassword)
         const user = await prisma.user.create({
             data: {
                 email: email,
                 password: hashedPassword,
+                profile: {
+                    create: {
+                        name: "",
+                        bio: ""
+                    }
+                }
             }
         })
-        res.status(201).json({ message: "Signup successful", user })
+        const payload = { userId: user.id }
+        const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
+        res.status(201).json({ message: "Signup successful", token })
     } catch (error) {
         console.error("Signup unsuccessful: ", error)
         res.status(500).json({ error: "Signup unsuccessful" })
     }
 })
 
-router.get("/signin", async (req: express.Request<{},{},UserFields>,  res:express.Response) => {
+router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     const { email, password } = req.body;
     if (!email) {
         return res.status(400).json({ message: "Missing email" })
@@ -50,7 +64,7 @@ router.get("/signin", async (req: express.Request<{},{},UserFields>,  res:expres
     }
 
     const user = await prisma.user.findUnique({
-        where: {email}
+        where: { email }
     })
     if (!user) {
         return res.status(400).json({ message: "User not found" })
@@ -68,11 +82,11 @@ router.get("/signin", async (req: express.Request<{},{},UserFields>,  res:expres
         return res.json({ message: "Error: JWT_SECRET is empty or not set" })
     }
 
-    res.cookie("jwt", token, { httpOnly: true, secure: true })
+    res.cookie("jwt", token, { httpOnly: true, secure: false }) //set secure:true for PRODUCTION    
     res.json({ message: 'Login successful', user })
 })
 
-router.put("/profile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{},{},ProfileFields>,  res:express.Response) => {
+router.put("/profile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
     try {
         const { name, bio } = req.body;
         const updatedUser = await prisma.user.update({
@@ -99,5 +113,8 @@ router.put("/profile", passport.authenticate('jwt', { session: false }), async (
     }
 })
 
+router.get("/check", passport.authenticate('jwt', {session:false}), (req,res)=>{
+    res.status(200).json({message: 'Authenticated'});
+});
 
 export default router;

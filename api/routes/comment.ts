@@ -1,3 +1,4 @@
+//this file is untested
 import express from "express"
 import passport from "passport";
 import prisma from "../utils/prismaClient";
@@ -6,7 +7,7 @@ import { User } from "@prisma/client";
 const router = express.Router();
 
 interface CommentBody {
-    comment: string;
+    comment: string;  
     blogId: string; // ID of the blog the comment belongs to
     userId?: string; // Optional user ID for anonymous comments
 }
@@ -17,11 +18,16 @@ interface UpdateCommentBody {
 
 router.post("/blog/:blogId/createComment", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ blogId: string }, {}, CommentBody>, res: express.Response) => {
     try {
-        const { comment, blogId, userId } = req.body
+        const {blogId} = req.params
+        const { comment, userId } = req.body
 
-        if (!comment || !blogId) {
-            return res.json({ message: "Fields are empty" })
+        if (!comment ) {
+            return res.json({ message: "Comment is empty" })
         }
+        if (!blogId ) {
+            return res.json({ message: "blogId is empty" })
+        }
+        
 
         const newComment = await prisma.comment.create({
             data: {
