@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import CommentDropDown from "./CommentDropDown";
+import { useRecoilState } from "recoil";
+import { currCommentState } from "@/store/atoms/commentAtoms";
 
 interface Comment {
     id: string;
@@ -19,8 +21,8 @@ interface BlogCommentsResponse {
 
 const BlogComment = () => {
     const { blogId } = useParams<{ blogId: string }>();
-    const [comment, setComment] = useState("");
-    const [currBlogComments, setCurrBlogComments] = useState<Comment[]>([]);
+    const [comment, setComment] = useState(""); // to create a comment
+    const [currBlogComments, setCurrBlogComments] = useRecoilState(currCommentState); // to fetch the comment
 
     const getComments = async () => {
         try {
@@ -43,6 +45,7 @@ const BlogComment = () => {
             });
             if (response.status === 200) {
                 console.log("Comment created successfully");
+                console.log("comment: ", comment);
                 setComment(""); //clears the commment field
                 getComments(); // Re-fetch comments to update the list
             }
@@ -51,8 +54,8 @@ const BlogComment = () => {
         }
     };
 
-    console.log("comments: ", currBlogComments);
-
+    console.log("currBlogComments: ", currBlogComments);
+    
     const showBlogComments = currBlogComments.map((comment) => (
         <div key={comment.id}>
             <div className="flex justify-between border border-slate-400">
@@ -60,12 +63,12 @@ const BlogComment = () => {
                     {comment.comment}
                 </div>
                 <div>
-                    <CommentDropDown id={comment.id} userId={comment.userId} setComment={} />
+                    <CommentDropDown id={comment.id} userId={comment.userId} initialComment={""} />
                 </div>
             </div>
         </div>
     ));
-    // comment={comment.comment}
+    
     return (
         <div className="container bg-zomp">
             <div>comment section</div>

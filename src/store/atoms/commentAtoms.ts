@@ -1,24 +1,19 @@
 import { atom } from 'recoil';
 
 export interface Comment {
-    id: string;
-    comment: string;
-    commentDislikes: number;
-    commentLikes: number;
-    userId: string;
+  id: string;
+  comment: string;
+  commentDislikes: number;
+  commentLikes: number;
+  userId: string;
 }
 
-export const commentsState = atom<Comment[]>({
-    key: 'commentsState',
-    default: [],
+export const currCommentState = atom<Comment[]>({
+  key: 'currCommentState ',
+  default: [],
 });
 
-// export const blogIdState = atom<string | null>({
-//     key: 'blogIdState',
-//     default: null,
-// });
-
-// export const userIdState = atom<string | null>({
-//     key: 'userIdState',
-//     default: null,
-// });
+export const selectedCommentIdState = atom<string | null>({
+  key: 'selectedCommentIdState',
+  default: null,
+});
