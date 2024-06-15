@@ -17,11 +17,13 @@ const Signup = () => {
       const response = await axios.post("http://localhost:3000/api/user/signup", {
         email,
         password
-      });
+      }, {
+        withCredentials: true // Include credentials (cookies) in the request
+    });
       const token = response.data.token;
-      console.log(token)
+      console.log("token",token)
       if (token) {
-        setCookie("jwt", token, { path: "/", secure: false });
+        setCookie("jwt", token, { path: "/" });
         console.log("Signup successful: ", token);
         navigate("/profile");
       } else {
@@ -36,7 +38,9 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Let's get you signed up</h2>
+
         <form onSubmit={handleSignup}>
+
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
               Email
@@ -51,6 +55,7 @@ const Signup = () => {
               required
             />
           </div>
+
           <div className="mb-6">
             <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
               Password
@@ -64,7 +69,9 @@ const Signup = () => {
               placeholder="Enter your password"
               required
             />
+
           </div>
+
           <div className="flex items-center justify-between">
             <Button
               type="submit"
@@ -73,6 +80,7 @@ const Signup = () => {
               Sign Up
             </Button>
           </div>
+          
         </form>
       </div>
     </div>

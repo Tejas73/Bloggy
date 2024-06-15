@@ -6,19 +6,23 @@ import axios from "axios";
 
 const useAuth = async () => {
     const [auth, setAuth] = useRecoilState(isLoggedIn);
-    const [cookie] = useCookies(['jwt']);
-
+    const [cookie,setCookie] = useCookies(['jwt']);
+    // const [cookiesUser, setCookies] = useCookies(['user'])
+    // console.log('jwt cookie', cookie);
+    // console.log("user cookie", cookiesUser);
     useEffect(() => {
         const checkAuth = async () => {
             if(!cookie.jwt){
                 setAuth({isAuthenticated:false});
+                // console.log("reached hereeeee", cookie)
                 return;
             }
-            
             try {
-                const response = await axios.get('http://localhost:3000/user/check', {
+                
+                const response = await axios.get('http://localhost:3000/api/user/check', {
                     withCredentials: true
                 })
+                // console.log("state changed to true",response.status);
                 if(response.status === 200){
                     setAuth({isAuthenticated:true});
                 }
@@ -27,7 +31,7 @@ const useAuth = async () => {
             }
         };
         checkAuth();
-    }, [cookie.jwt])
+    }, [cookie])
 
     return auth;
 }

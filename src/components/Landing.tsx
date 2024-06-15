@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import Appbar from './Appbar';
+import Appbar from '../utility-components/Appbar';
 
 const Landing = () => {
   return (

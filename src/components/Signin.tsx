@@ -10,6 +10,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
+  const [cookies, setCookies] = useCookies(['user'])
 
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -21,8 +22,9 @@ const Signin = () => {
       const token = response.data.token;
       console.log(token)
       if (token) {
-        setCookie("jwt", token, { path: "/", secure: false });
-        console.log("Signin successful: ", token);
+        setCookie("jwt", token, { path: "/" });
+        setCookies('user', token, { path: '/' });
+         console.log("Signin successful: ", token);
         navigate("/feed");
       } else {
         console.error("Signin failed: token not set");
@@ -35,7 +37,7 @@ const Signin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Let's get you signed up</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Welcome back! Sign in to continue</h2>
 
         <form onSubmit={handleSignin}>
           <div className="mb-4">
@@ -71,7 +73,7 @@ const Signin = () => {
               type="submit"
               className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Sign Up
+              Signin
             </Button>
           </div>
         </form>

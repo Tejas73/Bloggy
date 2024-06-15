@@ -1,4 +1,7 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import { jwtStrategy } from './utils/auth';
@@ -6,21 +9,20 @@ import userRoute from './routes/user'
 import blogRoute from './routes/blog'
 import commentRoute from './routes/comment'
 import prisma from './utils/prismaClient';
-import bodyParser from 'body-parser';
-import 'dotenv/config';
-import cors from 'cors';
 
 
 passport.use(jwtStrategy);
 
 const app = express();
 app.use(bodyParser.json());
+
 // Middleware to parse cookies
 app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:5173", 
     credentials: true 
 }));
+
 // Initialize Passport
 app.use(passport.initialize());
 

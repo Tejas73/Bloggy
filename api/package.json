@@ -23,18 +23,20 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "ts-node": "^10.9.2"
+    "sanitize-html": "^2.13.0"
   },
   "devDependencies": {
     "@prisma/client": "^5.14.0",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
+    "@types/sanitize-html": "^2.11.0",
     "i": "^0.3.7",
+    "nodemon": "^3.1.1",
     "npm": "^10.8.0",
-    "prisma": "^5.14.0"
+    "prisma": "^5.14.0",
+    "ts-node": "^10.9.2"
   }
 }

@@ -26,6 +26,7 @@ module.exports = {
         night: "#0b0a09",
         zomp:"#66a182",
         tgreen: "#caffb9",
+        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -14,6 +14,8 @@ const Profile = () => {
       const response = await axios.put("/api/user/profile", {
         name,
         bio
+      }, {
+        withCredentials: true // Include credentials (cookies) in the request
       });
 
       if (response.status === 200) {

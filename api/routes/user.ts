@@ -54,6 +54,30 @@ router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: exp
     }
 })
 
+router.put("/profile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
+    try {
+        const { name, bio } = req.body;
+        console.log(req)
+        const updatedProfile = await prisma.profile.update({
+            where: { userId: (req.user as User).id },
+            data: {
+                name,
+                bio
+            },
+            // include: { profile: true }
+        });
+
+        if (!updatedProfile) {
+            return res.status(500).json({ message: "Error updating profile" })
+        }
+
+        res.json({ message: "Profile updated successfully", profile: updatedProfile })
+
+    } catch (error) {
+        console.error("Error in profile route: ", error)
+    }
+})
+
 router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     const { email, password } = req.body;
     if (!email) {
@@ -77,44 +101,47 @@ router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: exp
 
     const payload = { userId: user.id }
     const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
+    console.log("token from signup ", token); // this works
 
     if (!process.env.JWT_SECRET) {
         return res.json({ message: "Error: JWT_SECRET is empty or not set" })
     }
 
     res.cookie("jwt", token, { httpOnly: true, secure: false }) //set secure:true for PRODUCTION    
-    res.json({ message: 'Login successful', user })
+    res.json({ message: 'Login successful', token, user })
 })
 
-router.put("/profile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
-    try {
-        const { name, bio } = req.body;
-        const updatedUser = await prisma.user.update({
-            where: { id: (req.user as User).id },
-            data: {
-                profile: {
-                    update: {
-                        name,
-                        bio
-                    },
-                },
-            },
-            include: { profile: true }
-        });
 
-        if (!updatedUser) {
-            return res.status(500).json({ message: "Error updating profile" })
+router.get("/myprofile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
+    try {
+        const userId = (req.user as User).id;
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { profile: true }
+        })
+
+        if (!user || !user.profile) {
+            return res.status(404).json({ message: "Profile not found" })
         }
 
-        res.json({ message: "Profile updated successfully", user: updatedUser })
+        const profileData: UserFields = {
+            email: user.email,
+            password: "",
+            profile: {
+                name: user.profile.name,
+                bio: user.profile.bio
+            }
+        }
+        console.log(profileData)
+        res.json(profileData);
 
     } catch (error) {
-        console.error("Error in profile route: ", error)
+        console.error("Error in fetching profile details: ", error)
     }
 })
 
-router.get("/check", passport.authenticate('jwt', {session:false}), (req,res)=>{
-    res.status(200).json({message: 'Authenticated'});
+router.get("/check", passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.status(200).json({ message: 'Authenticated' });
 });
 
 export default router;
