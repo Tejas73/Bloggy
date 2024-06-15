@@ -60,12 +60,12 @@ const BlogComment = () => {
                     {comment.comment}
                 </div>
                 <div>
-                    <CommentDropDown  />
+                    <CommentDropDown id={comment.id} userId={comment.userId} setComment={} />
                 </div>
             </div>
         </div>
     ));
-
+    // comment={comment.comment}
     return (
         <div className="container bg-zomp">
             <div>comment section</div>

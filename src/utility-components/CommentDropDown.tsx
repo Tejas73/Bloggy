@@ -9,17 +9,20 @@ import { isLoggedIn } from "@/store/atoms/isLoggedIn";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 
-// interface CommentDropDownProps{
-//     userId: string;
-//     id:string;
-// }
+interface CommentDropDownProps{
+    userId: string;
+    id:string;
+    comment: string;
+}
 
-const CommentDropDown = () => {
+const CommentDropDown = (props: CommentDropDownProps) => {
     useAuth();
     const auth = useRecoilValue(isLoggedIn);
 
     const handleEditComment = () => {
-        const response = axios.put(`http://localhost:3000/api/comment/editcomment/?userId=${props.userId}&id=${props.id}`);
+        const response = axios.put(`http://localhost:3000/api/comment/editcomment/?userId=${props.userId}&id=${props.id}`,{
+            comment
+        });
 
         }
         const handleDeleteComment = () => {
