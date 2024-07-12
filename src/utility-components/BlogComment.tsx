@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import CommentDropDown from "./CommentDropDown";
 import { useRecoilState } from "recoil";
 import { currCommentState } from "@/store/atoms/commentAtoms";
+import CommentMenu from "./CommentMenu";
 
 interface Comment {
     id: string;
@@ -55,7 +55,7 @@ const BlogComment = () => {
     };
 
     console.log("currBlogComments: ", currBlogComments);
-    
+
     const showBlogComments = currBlogComments.map((comment) => (
         <div key={comment.id}>
             <div className="flex justify-between border border-slate-400">
@@ -63,22 +63,22 @@ const BlogComment = () => {
                     {comment.comment}
                 </div>
                 <div>
-                    <CommentDropDown id={comment.id} userId={comment.userId} initialComment={""} />
+                    <CommentMenu id={comment.id} userId={comment.userId} initialComment={""} />
                 </div>
             </div>
         </div>
     ));
-    
+
     return (
         <div className="container bg-zomp">
-            <div>comment section</div>
+            <div>Comments</div>
             <div>
                 <Input
                     type="text"
                     id="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    placeholder="Type your comment"
+                    placeholder="Add a comment"
                 />
                 <Button onClick={handleCreateComment}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">

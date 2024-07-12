@@ -32,13 +32,13 @@ const CreateBlog = () => {
                 navigate("/feed");
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error); 
         }
 
     };
 
     const toolbarOptions = {
-        options: ['inline', 'list', 'textAlign', 'history'], //removed 'image'
+        options: ['inline', 'list', 'textAlign', 'history'], //removed 'image' from here
         inline: {
             inDropdown: false,
             options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],

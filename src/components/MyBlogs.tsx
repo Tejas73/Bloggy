@@ -30,8 +30,10 @@ const MyBlogs = () => {
     const getMyBLogs = myblogs?.myBlogs.map((blog) => {
         return (
             <div>
-                <div>{blog.title}</div>
-                <div>{blog.description}</div>
+                <div dangerouslySetInnerHTML={{ __html: blog.title }} />
+                <div dangerouslySetInnerHTML={{ __html: blog.description }} />
+                {/* <div>{blog.title}</div>
+                <div>{blog.description}</div> */}
             </div>
         )
     })

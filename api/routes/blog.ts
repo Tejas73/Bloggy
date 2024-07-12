@@ -92,7 +92,7 @@ router.put("/updatemyblog/:id", passport.authenticate("jwt", { session: false })
                 title: title,
                 description: sanitizedDescription,
             }
-        })
+        }) 
 
         res.json({ message: "Blog updated successfully", updatedBlog })
     } catch (error) {

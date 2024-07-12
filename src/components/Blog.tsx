@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import BlogComment from "../utility-components/BlogComment";
 
 interface OpenedBlogFields {
-    title: string,
-    description: string
+    title: string | TrustedHTML,
+    description: string| TrustedHTML
 }
 
 const Blog = () => {
@@ -28,8 +28,10 @@ const Blog = () => {
 
     return <div>
         Blog here
-        <div>{openedBlog?.title}</div>
-        <div>{openedBlog?.description}</div>
+        <div dangerouslySetInnerHTML={{ __html: openedBlog?.title }} />
+        <div dangerouslySetInnerHTML={{ __html: openedBlog?.description }} />
+        {/* <div>{openedBlog?.title}</div>
+        <div>{openedBlog?.description}</div> */}
 
         <BlogComment></BlogComment>
     </div>
