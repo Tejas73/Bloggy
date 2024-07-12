@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import useAuth from '@/hooks/useAuth';
-import { currCommentState, selectedCommentIdState } from '@/store/atoms/commentAtoms';
+import {
+    currCommentState,
+    selectedCommentIdState,
+} from '@/store/atoms/commentAtoms';
 import { isLoggedIn } from '@/store/atoms/isLoggedIn';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-interface CommentMenuProps {
+interface CommentDropDownProps {
     userId: string;
     id: string;
     initialComment: string;
 }
 
-const CommentMenu: React.FC<CommentMenuProps> = ({
+const CommentDropDown: React.FC<CommentDropDownProps> = ({
     id,
     userId,
     initialComment,
@@ -67,7 +75,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
                         id="comment"
                         value={editedComment}
                         onChange={e => setEditedComment(e.target.value)}
-                        placeholder="comment"
+                        placeholder="Type your comment"
                     />
                     <Button onClick={handleEditThisComment}>
                         <svg
@@ -128,4 +136,4 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     );
 };
 
-export default CommentMenu;
+export default CommentDropDown;

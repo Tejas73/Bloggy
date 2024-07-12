@@ -37,10 +37,8 @@ const Feed = () => {
         }
         return (
             <div className="border" onClick={blog} key={blogs.id}>
-                {/* <div>{blogs.title}</div> */}
-                {/* <div>{blogs.description}</div> */}
-                <div dangerouslySetInnerHTML={{ __html: blogs.title }} />
-                <div dangerouslySetInnerHTML={{ __html: blogs.description }} />
+                <div>{blogs.title}</div>
+                <div>{blogs.description}</div>
             </div>
         )
     })
