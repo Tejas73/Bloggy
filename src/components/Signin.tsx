@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { currUserId } from "@/store/atoms/isLoggedIn";
-import { useSetRecoilState } from "recoil";
-// import { useRecoilState } from "recoil";
+// import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -14,10 +14,12 @@ const Signin = () => {
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
   const [cookies, setCookies] = useCookies(['user'])
-  const  setAuthState = useSetRecoilState(currUserId);
+  // const  setAuthState = useSetRecoilState(currUserId);
+  const  [authState, setAuthState] = useRecoilState(currUserId);
 
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
+
     try {
       const response = await axios.post("http://localhost:3000/api/user/signin", {
         email,
@@ -25,18 +27,29 @@ const Signin = () => {
       });
       const {token, user} = response.data;
       console.log("user: ", user)
+
       if (token) {
         setCookie("jwt", token, { path: "/" });
         setCookies('user', token, { path: '/' });
+        
+        console.log("user: ", user.id)
+        console.log("email: ", user.email)
         setAuthState({userID: user.id})
+        console.log("authState", authState)
         //  console.log("Signin successful: ", token);
         navigate("/feed");
-      } else {
+      }
+
+       else {
         console.error("Signin failed: token not set");
       }
-    } catch (error) {
+
+    } 
+    
+    catch (error) {
       console.error("Error during Signin: ", error);
     }
+
   };
 
   return (

@@ -32,7 +32,7 @@ const CreateBlog = () => {
                 title: title,
                 description: sanitizedHtml
             });
-            if(response){
+            if (response) {
                 console.log("Blog created successfully", response.data);
                 navigate("/feed");
             }
@@ -76,6 +76,9 @@ const CreateBlog = () => {
 
                 <div className="flex items-center w-64 ">
                     {/* publish */}
+                    {/* {(title !== "" || !editorState.isEmpty()) && (<Button className="bg-night text-white hover:bg-slate-900  rounded-full " onClick={handlePublish}>
+                        Publish
+                    </Button>)} */}
                     <Button className="bg-night text-white hover:bg-slate-900  rounded-full " onClick={handlePublish}>
                         Publish
                     </Button>
@@ -99,17 +102,18 @@ const CreateBlog = () => {
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Title"
                             className="w-full p-2"
+                            placeholder="Title"
                         />
                     </div>
 
                     {/* description */}
                     <Editor
+                        toolbar={toolbarOptions}
+
+                        wrapperClassName="demo-wrapper"
                         editorState={editorState}
                         onEditorStateChange={setEditorState}
-                        toolbar={toolbarOptions}
-                        wrapperClassName="demo-wrapper"
                         editorClassName="demo-editor bg-white p-2 font-description text-xl"
                         placeholder="Start writing your blog here..."
                     />

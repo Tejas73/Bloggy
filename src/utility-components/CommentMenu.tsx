@@ -41,6 +41,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
             console.error('Error deleting comment: ', error);
         }
     };
+    console.log("authUserId", authUserId)
     // && authState.user?.id === userId
     return (
         <div>

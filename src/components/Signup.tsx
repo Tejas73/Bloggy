@@ -21,10 +21,10 @@ const Signup = () => {
         withCredentials: true // Include credentials (cookies) in the request
     });
       const token = response.data.token;
-      // console.log("token",token)
+      console.log("token",token)
       if (token) {
         setCookie("jwt", token, { path: "/" });
-        // console.log("Signup successful: ", token);
+        console.log("Signup successful: ", token);
         navigate("/profile");
       } else {
         console.error("Signup failed: token not set");

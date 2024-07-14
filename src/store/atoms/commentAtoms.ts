@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 
 export interface Comment {
+  profile: any;
   id: string;
   comment: string;
   commentDislikes: number;
