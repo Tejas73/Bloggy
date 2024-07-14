@@ -17,3 +17,9 @@ export const selectedCommentIdState = atom<string | null>({
   key: 'selectedCommentIdState',
   default: null,
 });
+
+export const editCommentState = atom<boolean>({
+  key: 'editCommentState',
+  default: false
+})
+

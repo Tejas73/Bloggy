@@ -25,7 +25,7 @@ model Profile {
   bio    String
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
-}
+} 
 
 model Blog {
   id          String    @id @default(uuid())

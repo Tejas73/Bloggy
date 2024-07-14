@@ -69,7 +69,7 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
 
 })
 
-// route to update a comment
+// route to edit a comment
 router.put("/editcomment", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ id: string }, {}, UpdateCommentBody>, res: express.Response) => {
     const { id, userId } = req.query as { id: string; userId: string };
     const { comment } = req.body;

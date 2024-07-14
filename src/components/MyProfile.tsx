@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 
+// improve UI
+// add password field
+// make the fields editable
 interface ProfileFields {
     name: string,
     bio: string

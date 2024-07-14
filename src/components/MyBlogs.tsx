@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 
+// improve UI
+// fix the rendering of title and description of the blogs 
+
 interface BlogField {
     title: string,
     description: string
@@ -14,7 +17,7 @@ interface MyBlogsField {
 const MyBlogs = () => {
     const [myblogs, setMyblogs] = useState<MyBlogsField | null>(null);
     useEffect(() => {
-        const CurrBlogs = async () => {
+        const currBlogs = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/blog/myblogs")
                 console.log(response.data);
@@ -23,9 +26,9 @@ const MyBlogs = () => {
                 console.error("Error fetching blog data: ", error);
             }
         }
-        CurrBlogs();
+        currBlogs();
     }, [])
-    console.log("z", myblogs);
+    console.log("myblogs: ", myblogs);
 
     const getMyBLogs = myblogs?.myBlogs.map((blog) => {
         return (

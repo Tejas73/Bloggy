@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import useAuth from "@/hooks/useAuth"
-import { isLoggedIn } from "@/store/atoms/isLoggedIn";
+import { currUserId, isLoggedIn } from "@/store/atoms/isLoggedIn";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useCookies, CookiesProvider } from "react-cookie";
@@ -15,11 +15,12 @@ import {
 
 
 const Appbar = () => {
-    console.log("Appbar called");
+    // console.log("Appbar called");
     useAuth(); // make this hook better to be able to use anywhere, example in handleHome function
     const auth = useRecoilValue(isLoggedIn);
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
+    const setUserId = useSetRecoilState(currUserId)
     const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
     // console.log(cookies);
     
@@ -30,6 +31,7 @@ const Appbar = () => {
     const handleLogout = (): void => {
         removeCookie('jwt', { path: '/' });
         setAuth({ isAuthenticated: false });
+        setUserId({ userID: null })
         navigate("/");
     }
 

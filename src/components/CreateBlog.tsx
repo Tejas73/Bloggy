@@ -8,6 +8,8 @@ import draftToHtml from 'draftjs-to-html';
 import sanitizeHtml from 'sanitize-html';
 import axios from 'axios';
 
+// add a check for publish if the blog is empty
+
 const CreateBlog = () => {
     const navigate = useNavigate();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -15,6 +17,9 @@ const CreateBlog = () => {
 
     const handleFeed = (): void => {
         navigate("/feed");
+    };
+    const handleProfileClick = (): void => {
+        navigate("/myprofile");
     };
 
     const handlePublish = async (): Promise<void> => {
@@ -76,7 +81,7 @@ const CreateBlog = () => {
                     </Button>
 
                     {/* profile */}
-                    <Button className="bg-transparent hover:bg-zomp hover:text-slate-500 text-night">
+                    <Button onClick={handleProfileClick} className="bg-transparent hover:bg-zomp hover:text-slate-500 text-night">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>

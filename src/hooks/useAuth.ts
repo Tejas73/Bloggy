@@ -4,6 +4,9 @@ import { useRecoilState } from "recoil";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
+
+// fix the logout upon refresh problem
+
 const useAuth = async () => {
     const [auth, setAuth] = useRecoilState(isLoggedIn);
     const [cookie,setCookie] = useCookies(['jwt']);

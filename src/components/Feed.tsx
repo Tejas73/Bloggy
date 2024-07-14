@@ -3,6 +3,8 @@ import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+//improve UI
+// fix the rendering of title and description of the blogs 
 interface Blogs {
     id: string,
     title: string,
@@ -18,7 +20,7 @@ const Feed = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        const CurrBlogs = async () => {
+        const currBlogs = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/blog/allblogs")
                 console.log(response.data);
@@ -27,7 +29,7 @@ const Feed = () => {
                 console.error("Error fetching feed data: ", error);
             }
         }
-        CurrBlogs();
+        currBlogs();
     }, [])
 
 

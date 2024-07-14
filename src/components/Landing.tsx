@@ -1,7 +1,15 @@
 import { Button } from '@/components/ui/button';
 import Appbar from '../utility-components/Appbar';
+import { useNavigate } from 'react-router-dom';
+
+//improve UI
 
 const Landing = () => {
+  const navigate = useNavigate()
+  const handleButtonForReading =()=>{
+    navigate('/feed')
+  }
+
   return (
     <div>
       <Appbar></Appbar>
@@ -11,7 +19,7 @@ const Landing = () => {
           <div className="text-3xl">
             Discover stories, thinking, and expertise from writers on any topic.
             <div>
-              <Button className="rounded-full">Start reading</Button>
+              <Button className="rounded-full" onClick={handleButtonForReading}>Start reading</Button>
             </div>
           </div>
         </div>

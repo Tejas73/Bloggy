@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BlogComment from "../utility-components/BlogComment";
 
+//improve UI
+// fix the rendering of title and description of the blogs 
 interface OpenedBlogFields {
     title: string,
     description: string
@@ -10,7 +12,7 @@ interface OpenedBlogFields {
 
 const Blog = () => {
     const { blogId } = useParams();
-    console.log(blogId)
+    console.log("blogId: ", blogId)
     const [openedBlog, setOpenedBlog] = useState<OpenedBlogFields | null>(null);
 
     useEffect(() => {

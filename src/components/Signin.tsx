@@ -4,6 +4,9 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { currUserId } from "@/store/atoms/isLoggedIn";
+import { useSetRecoilState } from "recoil";
+// import { useRecoilState } from "recoil";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -11,6 +14,7 @@ const Signin = () => {
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
   const [cookies, setCookies] = useCookies(['user'])
+  const  setAuthState = useSetRecoilState(currUserId);
 
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -19,12 +23,13 @@ const Signin = () => {
         email,
         password
       });
-      const token = response.data.token;
-      console.log(token)
+      const {token, user} = response.data;
+      console.log("user: ", user)
       if (token) {
         setCookie("jwt", token, { path: "/" });
         setCookies('user', token, { path: '/' });
-         console.log("Signin successful: ", token);
+        setAuthState({userID: user.id})
+        //  console.log("Signin successful: ", token);
         navigate("/feed");
       } else {
         console.error("Signin failed: token not set");
