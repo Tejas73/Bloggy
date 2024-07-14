@@ -8,8 +8,7 @@ import draftToHtml from 'draftjs-to-html';
 import sanitizeHtml from 'sanitize-html';
 import axios from 'axios';
 
-// add a check for publish if the blog is empty
-
+//try adding a the description check for publish button
 const CreateBlog = () => {
     const navigate = useNavigate();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -24,8 +23,11 @@ const CreateBlog = () => {
 
     const handlePublish = async (): Promise<void> => {
         const rawContentState = convertToRaw(editorState.getCurrentContent());
+        console.log("rawContentState: ", rawContentState);
         const contentHtml = draftToHtml(rawContentState);
+        console.log("contentHtml: ", contentHtml);
         const sanitizedHtml = sanitizeHtml(contentHtml);
+        console.log("sanitizedHtml: ", sanitizedHtml);
 
         try {
             const response = await axios.post("http://localhost:3000/api/blog/createblog", {
@@ -60,7 +62,6 @@ const CreateBlog = () => {
         // image: { inDropdown: false },
         history: { inDropdown: false },
     };
-
     return (
         <div>
             {/* appbar */}
@@ -75,13 +76,15 @@ const CreateBlog = () => {
                 </div>
 
                 <div className="flex items-center w-64 ">
+
                     {/* publish */}
-                    {/* {(title !== "" || !editorState.isEmpty()) && (<Button className="bg-night text-white hover:bg-slate-900  rounded-full " onClick={handlePublish}>
+                    {(title === "") ? (<Button className="bg-gray-600 hover:bg-gray-600 text-white  rounded-full ">
                         Publish
-                    </Button>)} */}
-                    <Button className="bg-night text-white hover:bg-slate-900  rounded-full " onClick={handlePublish}>
-                        Publish
-                    </Button>
+                    </Button>) : (
+                        <Button className="bg-night text-white hover:bg-slate-900  rounded-full " onClick={handlePublish}>
+                            Publish
+                        </Button>
+                    )}
 
                     {/* profile */}
                     <Button onClick={handleProfileClick} className="bg-transparent hover:bg-zomp hover:text-slate-500 text-night">
