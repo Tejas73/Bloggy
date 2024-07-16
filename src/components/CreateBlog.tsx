@@ -9,6 +9,7 @@ import sanitizeHtml from 'sanitize-html';
 import axios from 'axios';
 
 //try adding a the description check for publish button
+
 const CreateBlog = () => {
     const navigate = useNavigate();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
