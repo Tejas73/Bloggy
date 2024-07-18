@@ -2,6 +2,7 @@ import express from "express"
 import passport from "passport";
 import prisma from "../utils/prismaClient";
 import { User } from "@prisma/client";
+import { connect } from "http2";
 
 const router = express.Router();
 
@@ -46,7 +47,7 @@ router.post("/createComment/:blogId", passport.authenticate("jwt", { session: fa
                 profile: { connect: { id: userProfile.id } }
             },
         });
-        console.log("comment: ",newComment.comment);
+        console.log("comment: ", newComment.comment);
         res.json({ message: "Comment created successfully", newComment });
     } catch (error) {
         console.error("Error creating comment: ", error);
@@ -78,6 +79,112 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
     } catch (error) {
         console.error("Error fetching blog comments:", error);
         res.status(500).json({ message: 'Error fetching blog comments' });
+    }
+});
+
+//route to put like or dislike in the comment
+// likes and dislikes are not updating as expected  
+router.put("/updateCommentLike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }, {}, { liked: boolean; disliked: boolean }>, res: express.Response) => {
+    const { commentId } = req.params;
+    const { liked, disliked } = req.body;
+    const userId = (req.user as User).id;
+
+    if (!commentId) {
+        return res.status(400).json({ message: "Missing comment ID" });
+    }
+
+    try {
+        const existingLike = await prisma.commentLike.findUnique({
+            where: {
+                userId_commentId: {
+                    userId,
+                    commentId
+                }
+            }
+        });
+
+        if (existingLike) {
+            await prisma.commentLike.update({
+                where: {
+                    userId_commentId: {
+                        userId,
+                        commentId
+                    }
+                },
+                data: {
+                    liked,
+                    disliked
+                }
+
+            });
+
+            if (liked && !existingLike.liked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: {
+                        commentLikes: { increment: 1 },
+                        commentDislikes: existingLike.disliked ? { decrement: 1 } : undefined
+                    }
+                });
+            }
+            else if (liked && existingLike.liked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: {
+                        commentLikes: { decrement: 1 }
+                    }
+                });
+            }
+
+            if (disliked && !existingLike.disliked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: {
+                        commentDislikes: { increment: 1 },
+                        commentLikes: existingLike.liked ? { decrement: 1 } : undefined
+                    }
+                });
+            }
+            else if (disliked && existingLike.disliked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: {
+                        commentDislikes: { decrement: 1 }
+                    }
+                })
+            }
+        }
+
+        else {
+            await prisma.commentLike.create({
+                data: {
+                    user: { connect: { id: userId } },
+                    comment: { connect: { id: commentId } },
+                    liked,
+                    disliked
+                }
+            });
+
+            if (liked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: {
+                        commentLikes: { increment: 1 }
+                    }
+                });
+            } else if (disliked) {
+                await prisma.comment.update({
+                    where: { id: commentId },
+                    data: { commentDislikes: { increment: 1 } }
+                });
+            }
+        }
+
+        return res.json({ message: 'Comment like/dislike updated successfully' });
+
+    } catch (error) {
+        console.log("Error updating like/dislike: ", error);
+        return res.status(500).json({ message: 'Error updating comment like/dislike' });
     }
 });
 

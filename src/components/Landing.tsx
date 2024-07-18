@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
   const navigate = useNavigate()
-  const handleButtonForReading =()=>{
+  const handleButtonForReading = () => {
     navigate('/feed')
   }
 
@@ -24,14 +24,21 @@ const Landing = () => {
           </div>
         </div>
 
+        {/* buttons  */}
         <div className="absolute bottom-0 bg-night text-white w-full h-20 flex justify-center items-center">
-          <Button className="rounded-full bg-transparent hover:bg-night">Help</Button>
-          <Button className="rounded-full bg-transparent hover:bg-night">Status</Button>
-          <Button className="rounded-full bg-transparent hover:bg-night">About</Button>
-          <Button className="rounded-full bg-transparent hover:bg-night">Blog</Button>
-          <Button className="rounded-full bg-transparent hover:bg-night">Privacy</Button>
-          <Button className="rounded-full bg-transparent hover:bg-night">Terms</Button>
+          <div>
+            <Button className="rounded-full bg-transparent hover:bg-night">Help</Button>
+            <Button className="rounded-full bg-transparent hover:bg-night">Status</Button>
+            <Button className="rounded-full bg-transparent hover:bg-night">About</Button>
+            <Button className="rounded-full bg-transparent hover:bg-night">Blog</Button>
+            <Button className="rounded-full bg-transparent hover:bg-night">Privacy</Button>
+            <Button className="rounded-full bg-transparent hover:bg-night">Terms</Button>
+          </div>
+          <div className=' text-white text-xs'>
+            @Tejas Bhoyar
+          </div>
         </div>
+
       </div>
     </div>
   );

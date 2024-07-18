@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Appbar from "../utility-components/Appbar";
 import axios from "axios";
+import sanitizeHtml from 'sanitize-html';
 
 // improve UI
-// fix the rendering of title and description of the blogs 
 
 interface BlogField {
     title: string,
@@ -32,9 +32,20 @@ const MyBlogs = () => {
 
     const getMyBLogs = myblogs?.myBlogs.map((blog) => {
         return (
-            <div>
-                <div>{blog.title}</div>
-                <div>{blog.description}</div>
+            <div className="py-2">
+
+                <div className="text-3xl text-gray-800">{blog.title}</div>
+
+                <div className="relative h-11 overflow-hidden">
+                    <div
+                        className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent pointer-events-none"
+                        
+                    ></div>
+                    <div
+                        className="relative px-6 text-justify text-gray-600"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blog.description || '') }}
+                    />
+                </div>
             </div>
         )
     })
@@ -43,8 +54,8 @@ const MyBlogs = () => {
         <div>
             <Appbar></Appbar>
             <div>
-                <div className="w-2/4 mx-auto p-4 bg-fuchsia-400">
-                    <h1 className="text-2xl font-bold">My Blogs</h1>
+                <div className="w-2/4 mx-auto py-9">
+                    <h1 className="text-3xl font-bold">My Blogs</h1>
                     <div className="mt-4">
                         {getMyBLogs}
                     </div>

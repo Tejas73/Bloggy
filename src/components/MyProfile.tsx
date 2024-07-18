@@ -15,7 +15,7 @@ interface UserFields {
     password: string,
     profile: ProfileFields
 }
-
+ 
 const MyProfile = () => {
     const [userData, setUserData] = useState<UserFields | null>(null);
 

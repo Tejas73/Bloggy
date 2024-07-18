@@ -16,15 +16,13 @@ import {
 //improve logo
 
 const Appbar = () => {
-    // console.log("Appbar called");
     useAuth(); // make this hook better to be able to use anywhere, example in handleHome function
     const auth = useRecoilValue(isLoggedIn);
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
     const setUserId = useSetRecoilState(currUserId)
     const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
-    // console.log(cookies);
-    
+
     const handleSignupClick = (): void => {
         navigate("/signup");
     };
@@ -58,9 +56,27 @@ const Appbar = () => {
         <CookiesProvider>
             <div className="flex bg-tgreen justify-between items-center h-20 border-b-2 border-night sticky">
                 <div className="flex justify-between items-center pl-28">
-                    <div>
-                        <img src="logo-new.png" alt="logo" className="h-14" />
-                    </div>
+                    {/* logo  */}
+                    <svg width="56" height="56">
+                        <path d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
+                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(150, 28, 28)" />
+                        <path d="M14,28 A14,7 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
+                        <circle cx="28" cy="28" r="7" stroke="black" stroke-width="3" fill="transparent" />
+                    </svg>
+
+                    {/* animated logo  */}
+                    {/* <svg width="56" height="56">
+                        <path id="outer-semi-circle" d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="2" fill="transparent" transform="rotate(330, 28, 28)">
+                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="330 28 28" to="690 28 28" dur="3s" repeatCount="indefinite" />
+                        </path>
+
+                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(-30, 28, 28)" />
+                        <circle cx="28" cy="28" r="7" stroke="black" stroke-width="2" fill="transparent" />
+                    </svg> */}
+
+
+
+
                     <div className="font-title text-4xl" onClick={handleHome}>
                         Bloggy
                     </div>
@@ -105,12 +121,11 @@ const Appbar = () => {
                 </div>}
 
                 {/* if logged out then */}
-                {!auth.isAuthenticated && <div className="flex justify-between items-center w-64">
+                {!auth.isAuthenticated && <div className="flex justify-around items-center w-64">
+
                     <Button className="bg-transparent text-night hover:bg-tgreen hover:text-slate-400" onClick={handleSigninClick}>Signin</Button>
-                    {/* adjust the hover for Get Started button */}
-                    <Button className="rounded-full" onClick={handleSignupClick}>
-                        Get Started
-                    </Button>
+
+                    <Button className="rounded-full" onClick={handleSignupClick}>Get Started</Button>
                 </div>
                 }
 

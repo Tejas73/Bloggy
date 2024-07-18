@@ -40,7 +40,7 @@ const CreateBlog = () => {
                 navigate("/feed");
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error); 
         }
 
     };
@@ -123,7 +123,7 @@ const CreateBlog = () => {
                     />
                 </div>
             </div>
-
+            
         </div>
 
     );

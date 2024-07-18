@@ -11,8 +11,9 @@ interface BlogTypes {
     description: string
 }
 
+//create a new blog
 router.post("/createblog", passport.authenticate("jwt", { session: false }), async (req: express.Request<{}, {}, BlogTypes>, res: express.Response) => {
-    try {
+    try { 
         const { title, description } = req.body;
         const sanitizedDescription = sanitizeHtml(description);
         const newBlog = await prisma.blog.create({
@@ -48,7 +49,7 @@ router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (
     }
 })
 
-// all the damn blogs
+// get all blogs for feed
 router.get("/allblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
     try {
         const showBlogs = await prisma.blog.findMany({})
