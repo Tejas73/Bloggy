@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Appbar from '../utility-components/Appbar';
 import { useNavigate } from 'react-router-dom';
+import { SvgSquares } from './ui/svgsquares';
 
 //improve UI
 
@@ -12,9 +13,13 @@ const Landing = () => {
 
   return (
     <div>
+
       <Appbar></Appbar>
+
       <div className="relative h-sc bg-tgreen text-night h-screen">
-        <div>
+
+        {/* body  */}
+        <div className='pt-11 pl-16'>
           <div className="text-7xl font-sans">Share your knowledge</div>
           <div className="text-3xl">
             Discover stories, thinking, and expertise from writers on any topic.
@@ -24,7 +29,12 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* buttons  */}
+        {/* svg  */}
+        <div className=' mt-7'>
+          <SvgSquares></SvgSquares>
+        </div>
+
+        {/* footer  */}
         <div className="absolute bottom-0 bg-night text-white w-full h-20 flex justify-center items-center">
           <div>
             <Button className="rounded-full bg-transparent hover:bg-night">Help</Button>
