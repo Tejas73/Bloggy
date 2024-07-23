@@ -24,6 +24,7 @@ router.post("/createComment/:blogId", passport.authenticate("jwt", { session: fa
         const { blogId } = req.params
         const { comment } = req.body
         const userId = (req.user as User).id
+        
         if (!comment) {
             return res.json({ message: "Comment is empty" })
         }
@@ -86,7 +87,7 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
 // likes and dislikes are not updating as expected  
 router.put("/updateCommentLike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }, {}, { liked: boolean; disliked: boolean }>, res: express.Response) => {
     const { commentId } = req.params;
-    const { liked, disliked } = req.body;
+    const { liked, disliked } = req.body; 
     const userId = (req.user as User).id;
 
     if (!commentId) {

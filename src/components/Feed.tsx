@@ -8,7 +8,13 @@ import sanitizeHtml from 'sanitize-html';
 interface Blogs {
     id: string,
     title: string,
-    description: string
+    description: string,
+    profile: {
+        bio: string,
+        id: string,
+        name: string,
+        userId: string
+    }
 }
 
 interface ShowFeed {
@@ -41,16 +47,21 @@ const Feed = () => {
         return (
             <div className="py-2" onClick={blog} key={blogs.id}>
 
+                {/* title  */}
                 <div className="text-3xl text-gray-800">{blogs.title}</div>
 
+                {/* name  */}
+                <div>{blogs.profile.name}</div>
+
+                {/* description  */}
                 <div className="relative h-11 overflow-hidden">
                     <div
                         className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent pointer-events-none"
-                        
+
                     ></div>
                     <div
                         className="relative mt-1 px-6 text-justify text-gray-600"
-                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogs.description || '') }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogs.description || '').trim() }}
                     />
                 </div>
             </div>

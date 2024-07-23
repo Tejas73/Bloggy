@@ -7,7 +7,13 @@ import sanitizeHtml from 'sanitize-html';
 
 interface BlogField {
     title: string,
-    description: string
+    description: string,
+    profile: {
+        bio: string,
+        id: string,
+        name: string,
+        userId: string
+    }
 }
 
 interface MyBlogsField {
@@ -33,17 +39,21 @@ const MyBlogs = () => {
     const getMyBLogs = myblogs?.myBlogs.map((blog) => {
         return (
             <div className="py-2">
-
+                {/* title  */}
                 <div className="text-3xl text-gray-800">{blog.title}</div>
 
+                {/* name  */}
+                <div>{blog.profile.name}</div>
+
+                {/* description */}
                 <div className="relative h-11 overflow-hidden">
                     <div
                         className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent pointer-events-none"
-                        
+
                     ></div>
                     <div
                         className="relative px-6 text-justify text-gray-600"
-                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blog.description || '') }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blog.description || '').trim() }}
                     />
                 </div>
             </div>

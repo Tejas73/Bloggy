@@ -67,16 +67,20 @@ const CreateBlog = () => {
         <div>
             {/* appbar */}
             <div className="flex bg-zomp justify-around items-center h-20 border-b-2 border-night sticky">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <img src="logo-new.png" alt="logo" className="h-14" />
-                    </div>
-                    <div className="font-title text-4xl" onClick={handleFeed}>
+                <div className=" flex justify-between items-center">
+                    {/* logo  */}
+                    <svg width="56" height="56">
+                        <path d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
+                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(150, 28, 28)" />
+                        <path d="M14,28 A14,7 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
+                        <circle cx="28" cy="28" r="7" stroke="black" stroke-width="3" fill="transparent" />
+                    </svg>
+                    <div className="font-title text-4xl mr-40" onClick={handleFeed}>
                         Bloggy
                     </div>
                 </div>
 
-                <div className="flex items-center w-64 ">
+                <div className="ml-9 flex items-center w-64 ">
 
                     {/* publish */}
                     {(title === "") ? (<Button className="bg-gray-600 hover:bg-gray-600 text-white  rounded-full ">

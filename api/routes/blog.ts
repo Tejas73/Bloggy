@@ -13,21 +13,48 @@ interface BlogTypes {
 
 //create a new blog
 router.post("/createblog", passport.authenticate("jwt", { session: false }), async (req: express.Request<{}, {}, BlogTypes>, res: express.Response) => {
-    try { 
+    try {
         const { title, description } = req.body;
         const sanitizedDescription = sanitizeHtml(description);
+        const userId = (req.user as User).id
+
+        const userProfile = await prisma.profile.findUnique({
+            where: { userId }
+        })
+
+        if (!userProfile) {
+            return res.json({ message: "User profile not found for userId: ${userId}" })
+        }
+        console.log("userProfile: ", userProfile);
+        console.log("userProfile.name: ", userProfile.name);
+
         const newBlog = await prisma.blog.create({
             data: {
                 title,
                 description: sanitizedDescription,
-                authorId: (req.user as User).id
+                author: { connect: { id: userProfile.userId } },
+                profile: { connect: { id: userProfile.id } }
             }
         })
 
+        console.log("newBlog: ", newBlog);
         res.json({ message: "Blog created successfully", newBlog })
-        console.log(newBlog);
     } catch (error) {
         console.error("Error creating a blog: ", error)
+    }
+})
+
+// get all blogs for feed
+router.get("/allblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
+    try {
+        const showBlogs = await prisma.blog.findMany({
+            include: {
+                profile: true
+            },
+        });
+        res.json({ message: "Fetching of all Blogs successful", showBlogs })
+    } catch (error) {
+        console.error("Error getting all blogs: ", error)
     }
 })
 
@@ -39,25 +66,18 @@ router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (
             where: {
                 authorId: (req.user as User).id
             },
-            distinct: ["id"]
-
-
+            include: {
+                profile: true
+            },
+            // distinct: ["id"]
         })
+        console.log("myblogs: ", myBlogs);
         res.json({ message: "Fetching of myBlogs successful", myBlogs })
     } catch (error) {
         console.error("Error getting a blog: ", error)
     }
 })
 
-// get all blogs for feed
-router.get("/allblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
-    try {
-        const showBlogs = await prisma.blog.findMany({})
-        res.json({ message: "Fetching of all Blogs successful", showBlogs })
-    } catch (error) {
-        console.error("Error getting all blogs: ", error)
-    }
-})
 
 //get blog by id
 router.get("/feed/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {

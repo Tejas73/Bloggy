@@ -23,14 +23,16 @@ interface ProfileFields {
     name: string,
     bio: string
 }
-
+// route to signup
 router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     console.log(req.body)
     const { email, password } = req.body;
     const hashedPassword = await hashPassword(password);
+
     if (hashedPassword === null) {
         return res.status(500).json({ error: "Error hashing password, possibly null" })
     }
+
     try {
         console.log(hashedPassword)
         const user = await prisma.user.create({
@@ -54,15 +56,68 @@ router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: exp
     }
 })
 
+// route to fetch profile credentials
+router.get("/myprofile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
+    try {
+        const userId = (req.user as User).id;
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { profile: true }
+        })
+
+        if (!user || !user.profile) {
+            return res.status(404).json({ message: "Profile not found" })
+        }
+
+        const profileData: UserFields = {
+            email: user.email,
+            password: user.password,
+            profile: {
+                name: user.profile.name,
+                bio: user.profile.bio,
+            }
+        }
+        console.log(profileData)
+        res.json(profileData);
+
+    } catch (error) {
+        console.error("Error in fetching profile details: ", error)
+    }
+})
+
+//router to edit a name in MyProfile.tsx
+router.put("/updatename", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
+    try {
+        const { name } = req.body
+
+        const updateName = await prisma.profile.update({
+            where: { userId: (req.user as User).id },
+            data: {
+                name
+            }
+        })
+
+        if (!updateName) {
+            return res.status(500).json({ message: "Error updating name in myprofile" })
+        }
+
+        res.json({ message: "Profile updated successfully", profile: updateName })
+
+    } catch (error) {
+        console.error("Error in updating name: ", error)
+    }
+})
+
+//router to create a profile after signup
 router.put("/profile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
     try {
         const { name, bio } = req.body;
-        console.log(req)
+        console.log(req);
         const updatedProfile = await prisma.profile.update({
             where: { userId: (req.user as User).id },
             data: {
                 name,
-                bio
+                bio,
             },
             // include: { profile: true }
         });
@@ -77,6 +132,7 @@ router.put("/profile", passport.authenticate('jwt', { session: false }), async (
         console.error("Error in profile route: ", error)
     }
 })
+
 
 router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     const { email, password } = req.body;
@@ -112,33 +168,7 @@ router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: exp
 })
 
 
-router.get("/myprofile", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
-    try {
-        const userId = (req.user as User).id;
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            include: { profile: true }
-        })
 
-        if (!user || !user.profile) {
-            return res.status(404).json({ message: "Profile not found" })
-        }
-
-        const profileData: UserFields = {
-            email: user.email,
-            password: "",
-            profile: {
-                name: user.profile.name,
-                bio: user.profile.bio
-            }
-        }
-        console.log(profileData)
-        res.json(profileData);
-
-    } catch (error) {
-        console.error("Error in fetching profile details: ", error)
-    }
-})
 
 router.get("/check", passport.authenticate('jwt', { session: false }), (req, res) => {
     res.status(200).json({ message: 'Authenticated' });
