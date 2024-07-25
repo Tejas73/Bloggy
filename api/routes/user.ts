@@ -18,11 +18,18 @@ interface UserFields {
         bio: string
     }
 }
-
 interface ProfileFields {
     name: string,
     bio: string
 }
+
+interface UpdateFields {
+    updatedEmail: string,
+    updatedPassword: string
+    updatedName: string,
+    updatedBio: string
+}
+
 // route to signup
 router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     console.log(req.body)
@@ -50,7 +57,9 @@ router.post("/signup", async (req: express.Request<{}, {}, UserFields>, res: exp
         const payload = { userId: user.id }
         const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
         res.status(201).json({ message: "Signup successful", token })
-    } catch (error) {
+    }
+
+    catch (error) {
         console.error("Signup unsuccessful: ", error)
         res.status(500).json({ error: "Signup unsuccessful" })
     }
@@ -85,15 +94,66 @@ router.get("/myprofile", passport.authenticate('jwt', { session: false }), async
     }
 })
 
-//router to edit a name in MyProfile.tsx
-router.put("/updatename", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, ProfileFields>, res: express.Response) => {
+//router to edit an email in MyProfile.tsx
+router.put("/updateemail", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, UpdateFields>, res: express.Response) => {
     try {
-        const { name } = req.body
+        const { updatedEmail } = req.body
+
+        const updateEmail = await prisma.user.update({
+            where: { id: (req.user as User).id },
+            data: {
+                email: updatedEmail
+            }
+        })
+
+        if (!updateEmail) {
+            return res.status(500).json({ message: "updateEmail not found" })
+        }
+
+        res.json({ message: "Profile email updated successfully", profile: updateEmail })
+
+    } catch (error) {
+        console.error("Error in updating email: ", error)
+    }
+})
+
+//router to edit a password in MyProfile.tsx
+router.put("/updatepassword", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, UpdateFields>, res: express.Response) => {
+    try {
+        const { updatedPassword } = req.body;
+        const hashedUpdatedPassword = await hashPassword(updatedPassword);
+
+        if (hashedUpdatedPassword === null) {
+            return res.status(500).json({ error: "Error hashing password, possibly null" })
+        }
+
+        const updatePassword = await prisma.user.update({
+            where: { id: (req.user as User).id },
+            data: {
+                password: hashedUpdatedPassword
+            }
+        })
+
+        if (!updatePassword) {
+            return res.status(500).json({ message: "updatePassword not found" })
+        }
+        console.log("updatePassword:", updatePassword)
+        res.json({ message: "Profile password updated successfully", profile: updatePassword })
+
+    } catch (error) {
+        console.error("Error in updating password: ", error)
+    }
+})
+
+//router to edit a name in MyProfile.tsx
+router.put("/updatename", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, UpdateFields>, res: express.Response) => {
+    try {
+        const { updatedName } = req.body
 
         const updateName = await prisma.profile.update({
             where: { userId: (req.user as User).id },
             data: {
-                name
+                name: updatedName
             }
         })
 
@@ -105,6 +165,29 @@ router.put("/updatename", passport.authenticate('jwt', { session: false }), asyn
 
     } catch (error) {
         console.error("Error in updating name: ", error)
+    }
+})
+
+//router to edit the bio in MyProfile.tsx
+router.put("/updatebio", passport.authenticate('jwt', { session: false }), async (req: express.Request<{}, {}, UpdateFields>, res: express.Response) => {
+    try {
+        const { updatedBio } = req.body
+
+        const updateBio = await prisma.profile.update({
+            where: { userId: (req.user as User).id },
+            data: {
+                bio: updatedBio
+            }
+        })
+
+        if (!updateBio) {
+            return res.status(500).json({ message: "updateBio not found" })
+        }
+
+        res.json({ message: "Profile bio updated successfully", profile: updateBio })
+
+    } catch (error) {
+        console.error("Error in updating bio: ", error)
     }
 })
 
