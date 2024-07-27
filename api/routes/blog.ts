@@ -100,13 +100,13 @@ router.get("/feed/:blogId", passport.authenticate("jwt", { session: false }), as
 
 
 //update blog
-router.put("/updatemyblog/:id", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ id: string }, {}, BlogTypes>, res: express.Response) => {
+router.put("/updatemyblog/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
     try {
-        const blogId = req.params.id
+        const { blogId } = req.params;
         const { title, description } = req.body
         const sanitizedDescription = sanitizeHtml(description);
         const updatedBlog = await prisma.blog.update({
-            where: {
+            where: { 
                 id: blogId
             },
             data: {

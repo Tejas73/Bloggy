@@ -202,7 +202,6 @@ router.put("/profile", passport.authenticate('jwt', { session: false }), async (
                 name,
                 bio,
             },
-            // include: { profile: true }
         });
 
         if (!updatedProfile) {
