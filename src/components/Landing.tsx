@@ -18,20 +18,28 @@ const Landing = () => {
 
       <div className="relative h-sc bg-tgreen text-night h-screen">
 
-        {/* body  */}
-        <div className='pt-11 pl-16'>
-          <div className="text-7xl font-sans">Share your knowledge</div>
-          <div className="text-3xl">
-            Discover stories, thinking, and expertise from writers on any topic.
+        <div className='pt-36 flex justify-between'>
+
+          {/* body  */}
+          <div className=' pl-16'>
+            <div className="text-8xl font-sans mb-2">Share your knowledge</div>
+            {/* <div className="text-8xl font-sans">knowledge</div> */}
+
             <div>
-              <Button className="rounded-full" onClick={handleButtonForReading}>Start reading</Button>
+              <div  className="text-5xl text-wrap ">
+                Discover stories, thinking, and expertise from writers on any topic.
+
+              </div>
+              <div>
+                <Button className="rounded-full mt-2 text-lg" onClick={handleButtonForReading}>Start reading</Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* svg  */}
-        <div className=' mt-7'>
-          <SvgSquares></SvgSquares>
+          {/* svg  */}
+          <div className=' mt-7'>
+            <SvgSquares></SvgSquares>
+          </div>
         </div>
 
         {/* footer  */}
