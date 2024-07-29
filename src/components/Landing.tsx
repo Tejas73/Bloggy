@@ -31,7 +31,7 @@ const Landing = () => {
 
               </div>
               <div>
-                <Button className="rounded-full mt-2 text-lg" onClick={handleButtonForReading}>Start reading</Button>
+                <Button className="rounded-full mt-2 text-lg" onClick={handleButtonForReading}>Show me</Button>
               </div>
             </div>
           </div>
