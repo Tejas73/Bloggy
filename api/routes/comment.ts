@@ -2,7 +2,6 @@ import express from "express"
 import passport from "passport";
 import prisma from "../utils/prismaClient";
 import { User } from "@prisma/client";
-import { connect } from "http2";
 
 const router = express.Router();
 
@@ -45,7 +44,14 @@ router.post("/createComment/:blogId", passport.authenticate("jwt", { session: fa
                 comment,
                 blog: { connect: { id: blogId } },
                 user: userId ? { connect: { id: userId } } : undefined,
-                profile: { connect: { id: userProfile.id } }
+                profile: { connect: { id: userProfile.id } },
+                likes: {
+                    create: {
+                        user: {connect: {id: userId}},
+                        liked:false,
+                        disliked: false
+                    }
+                }
             },
         });
         console.log("comment: ", newComment.comment);
@@ -72,7 +78,12 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
                 profile: {
                     select: { name: true }
                 },
-                likes: true
+                likes: {
+                    select: {
+                        liked: true,
+                        disliked: true
+                    }
+                }
             }
         });
         console.log("blogComments:", blogComments);
@@ -95,46 +106,30 @@ router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { sessi
     }
 
     try {
-        if (liked) {
-            const likeInt = await prisma.comment.update({
-                where: { id: commentId },
-                data: {
-                    commentLikes: { increment: 1 },
-                }
-            });
+        const updatedLike = await prisma.commentLike.upsert({
+            where: {
+                userId_commentId: { userId: userId, commentId: commentId }
+            },
+            update: {
+                liked: liked,
+                disliked: !liked,
+            },
+            create: {
+                liked: liked,
+                disliked: !liked,
+                userId: userId,
+                commentId: commentId
+            }
+        });
 
-            const likeBool = await prisma.commentLike.update({
-                where: { id: commentId },
-                data: {
-                    liked: true,
-                    disliked: false,
-                    userId: userId
-                }
-            });
-            console.log("likeInt: ", likeInt);
-            console.log("likeBool: ", likeBool);
-            return res.json({ message: 'Comment liked updated successfully', likeInt, likeBool });
-
-        } else if (!liked) {
-            const unlikeInt = await prisma.comment.update({
-                where: { id: commentId },
-                data: {
-                    commentLikes: { decrement: 1 }
-                }
-            });
-            const unlikeBool = await prisma.commentLike.update({
-                where: { id: commentId },
-                data: {
-                    liked: false,
-                    disliked: false,
-                    userId: userId
-                }
-            });
-            console.log("unlikeInt: ", unlikeInt);
-            console.log("unlikeBool: ", unlikeBool);
-            return res.json({message: 'Comment unliked updated successfully', unlikeInt, unlikeBool});
-        }
-
+        await prisma.comment.update({
+            where: { id: commentId },
+            data: {
+                commentLikes: liked ? { increment: 1 } : { decrement: 1 },
+                commentDislikes: !liked ? { decrement: 1 } : {}
+            }
+        })
+        return res.json({ message: 'Comment like updated successfully', updatedLike });
 
     } catch (error) {
         console.log("Error updating like/unlike: ", error);
@@ -145,7 +140,7 @@ router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { sessi
 //route to update dislike in the comment
 router.put("/updatecommentdislike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }, {}, { liked: boolean; disliked: boolean }>, res: express.Response) => {
     const { commentId } = req.params;
-    const {  disliked } = req.body; //boolean
+    const { disliked } = req.body; //boolean
     const userId = (req.user as User).id;
 
     if (!commentId) {
@@ -153,45 +148,30 @@ router.put("/updatecommentdislike/:commentId", passport.authenticate("jwt", { se
     }
 
     try {
-        if (disliked) {
-            const dislikeInt = await prisma.comment.update({
-                where: { id: commentId },
-                data: {
-                    commentDislikes: { increment: 1 },
-                }
-            });
+        const updatedDislike = await prisma.commentLike.upsert({
+            where: {
+                userId_commentId: { userId: userId, commentId: commentId }
+            },
+            update: {
+                liked: !disliked,
+                disliked: disliked
+            },
+            create: {
+                liked: !disliked,
+                disliked: disliked,
+                userId: userId,
+                commentId: commentId
+            }
+        });
 
-            const dislikeBool = await prisma.commentLike.update({
-                where: { id: commentId },
-                data: {
-                    liked: false,
-                    disliked: true,
-                    userId: userId
-                }
-            });
-            console.log("dislikeInt: ", dislikeInt);
-            console.log("dislikeBool: ", dislikeBool);
-            return res.json({ message: 'Comment liked updated successfully', dislikeInt, dislikeBool });
-
-        } else if (!disliked) {
-            const undislikeInt = await prisma.comment.update({
-                where: { id: commentId },
-                data: {
-                    commentDislikes: { decrement: 1 }
-                }
-            });
-            const undislikeBool = await prisma.commentLike.update({
-                where: { id: commentId },
-                data: {
-                    liked: false,
-                    disliked: false,
-                    userId: userId
-                }
-            });
-            console.log("undislikeInt: ", undislikeInt);
-            console.log("undislikeBool: ", undislikeBool);
-            return res.json({message: 'Comment unliked updated successfully', undislikeInt, undislikeBool});
-        }
+        await prisma.comment.update({
+            where: { id: commentId },
+            data: {
+                commentLikes: !disliked ? { decrement: 1 } : {},
+                commentDislikes: disliked ? { increment: 1 } : { decrement: 1 }
+            }
+        });
+        return res.json({ message: 'Comment dislike updated successfully', updatedDislike });
 
     } catch (error) {
         console.log("Error updating like/dislike: ", error);
