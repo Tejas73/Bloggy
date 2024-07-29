@@ -45,24 +45,26 @@ const Feed = () => {
         }
 
         return (
-            <div className="py-2" onClick={blog} key={blogs.id}>
+            <div className="border p-3 ">
+                <div className="py-2 " onClick={blog} key={blogs.id}>
 
-                {/* title  */}
-                <div className="text-3xl text-gray-800">{blogs.title}</div>
+                    {/* title  */}
+                    <div className="text-3xl text-gray-800">{blogs.title}</div>
 
-                {/* name  */}
-                <div>{blogs.profile.name}</div>
+                    {/* name  */}
+                    <div>{blogs.profile.name}</div>
 
-                {/* description  */}
-                <div className="relative h-11 overflow-hidden">
-                    <div
-                        className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent pointer-events-none"
+                    {/* description  */}
+                    <div className="relative h-11 overflow-hidden">
+                        <div
+                            className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent pointer-events-none"
 
-                    ></div>
-                    <div
-                        className="relative mt-1 px-6 text-justify text-gray-600"
-                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogs.description || '').trim() }}
-                    />
+                        ></div>
+                        <div
+                            className="relative mt-1 px-6 text-justify text-gray-600"
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogs.description || '').trim() }}
+                        />
+                    </div>
                 </div>
             </div>
         )
@@ -71,9 +73,9 @@ const Feed = () => {
     return (
         <div>
             <Appbar></Appbar>
-            <div>
-                <div className="w-2/4 mx-auto p-4 ">
-                    <div className="mt-4">
+            <div >
+                <div className="w-2/4 mx-auto">
+                    <div className="">
                         {getMyBLogs}
                     </div>
                 </div>

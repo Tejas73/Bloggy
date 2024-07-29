@@ -9,13 +9,14 @@ import CreateBlog from "./components/CreateBlog";
 import MyProfile from "./components/MyProfile";
 import MyBlogs from "./components/MyBlogs";
 import Blog from "./components/Blog";
+import EditBlog from "./components/EditBlog";
 
 axios.defaults.baseURL = "http://localhost:3000";  // change this to match the new url for production
 axios.defaults.withCredentials = true;
 
 export default function App() {
-  
-    return (
+
+  return (
     <>
       <div className="App">
         <BrowserRouter>
@@ -28,6 +29,7 @@ export default function App() {
               <Route path="/createblog" element={<CreateBlog />} />
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/myblog" element={<MyBlogs />} />
+              <Route path="/myblog/:blogId" element={<EditBlog />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/feed/:blogId" element={<Blog />} />
             </Routes>

@@ -11,6 +11,7 @@ import { currUserId } from "@/store/atoms/isLoggedIn";
 
 //improve UI
 //refactor comment like-dislike feature
+//CommentMenu is not rendering(the component works fine)
 //when user clicks on the edit button, it should display the text which has to be edited
 interface Comment {
     id: string;
@@ -32,6 +33,7 @@ const BlogComment = () => {
     const [isEditing, setIsEditing] = useRecoilState(editCommentState); // used for editing a comment based on boolean value of editCommentState
     const [editedComment, setEditedComment] = useState(""); //used to store the text during editing
     const [selectedCommentId, setSelectedCommentId] = useRecoilState(selectedCommentIdState); // used to provide the id for the intended comment
+
     const [likeClicked, setLikeClicked] = useState<{ [key: string]: boolean }>({});
     const [dislikeClicked, setDislikeClicked] = useState<{ [key: string]: boolean }>({});
     const authUserId = useRecoilValue(currUserId);
@@ -86,7 +88,7 @@ const BlogComment = () => {
         setIsEditing(false);
         setEditedComment("");
         setSelectedCommentId(null);
-    }
+    } 
 
     const handleLikeButton = async (commentId: string) => {
         const newLikeState = !likeClicked[commentId];
