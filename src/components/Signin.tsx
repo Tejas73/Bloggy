@@ -13,7 +13,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
-  const [cookies, setCookies] = useCookies(['user'])
+  // const [cookies, setCookies] = useCookies(['user'])
   // const  setAuthState = useSetRecoilState(currUserId);
   const  [authState, setAuthState] = useRecoilState(currUserId);
 
@@ -25,14 +25,15 @@ const Signin = () => {
         email,
         password
       });
-      const {token, user} = response.data;
+      
+      const {token, user} = response.data; 
       console.log("user: ", user)
 
       if (token) {
         setCookie("jwt", token, { path: "/" });
-        setCookies('user', token, { path: '/' });
+        // setCookies('user', token, { path: '/' });
         
-        console.log("user: ", user.id)
+        console.log("SIGNIN userid: ", user.id)
         console.log("email: ", user.email)
         setAuthState({userID: user.id})
         console.log("authState", authState)
@@ -102,79 +103,3 @@ const Signin = () => {
 };
 
 export default Signin;
-// import { Button } from "@/components/ui/button"
-// import {
-//     Dialog,
-//     DialogContent,
-//     DialogDescription,
-//     DialogFooter,
-//     DialogHeader,
-//     DialogTitle,
-
-// } from "@/components/ui/dialog"
-// import { Input } from "@/components/ui/input"
-// import { useState } from "react";
-// import axios from "axios"
-// import { useCookies } from "react-cookie";
-
-// type CloseDialogFunction = () => void;
-
-// export default function Signin({onDialogClose}: { onDialogClose: CloseDialogFunction }) {
-//     const [email, setEmail] = useState("")
-//     const [password, setPassword] = useState("")
-
-//     const handleSignin = async (email: string, password: string) => {
-//         try {
-//             const response = await axios.post("http://localhost:3000/api/user/signin", {
-//                 email,
-//                 password
-//             })
-            
-
-//         } catch (error) {
-
-//         }
-
-
-//     }
-//     return (
-//         <div>
-//             <Dialog open={true}>
-//                 <DialogContent className="sm:max-w-[425px]">
-//                     <DialogHeader>
-//                         <DialogTitle>Welcome back</DialogTitle>
-//                         <DialogDescription>
-//                             Signin to continue
-//                         </DialogDescription>
-//                     </DialogHeader>
-//                     <div className="grid gap-4 py-4">
-//                         <div className="grid grid-cols-4 items-center gap-4">
-
-//                             <Input
-//                                 id="email"
-//                                 placeholder="Enter email"
-//                                 className="col-span-3"
-//                                 value={email}
-//                                 onChange={e => setEmail(e.target.value)}
-//                             />
-//                         </div>
-//                         <div className="grid grid-cols-4 items-center gap-4">
-
-//                             <Input
-//                                 id="password"
-//                                 placeholder="Enter password"
-//                                 className="col-span-3"
-//                                 value={password}
-//                                 onChange={e => setPassword(e.target.value)}
-//                             />
-//                         </div>
-//                     </div>
-//                     <DialogFooter>
-//                         <Button type="submit" className="bg-night" onClick={() => { handleSignin }} >Signin</Button>
-//                         <Button onClick={() => onDialogClose()} className="bg-night">Close</Button>
-//                     </DialogFooter>
-//                 </DialogContent>
-//             </Dialog>
-//         </div>
-//     )
-// }

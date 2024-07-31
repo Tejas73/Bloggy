@@ -49,11 +49,10 @@ const CreateBlog = () => {
         options: ['inline', 'list', 'textAlign', 'history'], //removed 'image'
         inline: {
             inDropdown: false,
-            options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],
+            options: ['bold', 'italic', 'underline', 'monospace'],
             bold: { className: undefined },
             italic: { className: undefined },
             underline: { className: undefined },
-            strikethrough: { className: undefined },
             monospace: { className: undefined },
             subscript: { className: undefined },
             superscript: { className: undefined },

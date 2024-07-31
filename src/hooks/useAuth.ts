@@ -4,33 +4,41 @@ import { useRecoilState } from "recoil";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
-
-// fix the logout upon refresh problem
-
 const useAuth = async () => {
     const [auth, setAuth] = useRecoilState(isLoggedIn);
-    const [cookie,setCookie] = useCookies(['jwt']);
-    // const [cookiesUser, setCookies] = useCookies(['user'])
-    // console.log('jwt cookie', cookie);
-    // console.log("user cookie", cookiesUser);
+    const [cookie, setCookie] = useCookies(['jwt']);
     useEffect(() => {
         const checkAuth = async () => {
-            if(!cookie.jwt){
-                setAuth({isAuthenticated:false});
-                // console.log("reached hereeeee", cookie)
-                return;
-            }
-            try {
-                
+            if (!cookie.jwt) {
                 const response = await axios.get('http://localhost:3000/api/user/check', {
                     withCredentials: true
                 })
-                // console.log("state changed to true",response.status);
-                if(response.status === 200){
-                    setAuth({isAuthenticated:true});
+                console.log("response.data.token: ", response.data.token);
+                const { token } = response.data;
+
+                if (token) {
+                    setCookie("jwt", token, { path: "/" });
+                    setAuth({ isAuthenticated: true });
+                } else {
+                    setAuth({ isAuthenticated: false });
+                }
+                // console.log("reached hereeeee")
+                return;
+            }
+
+            try {
+
+                const response = await axios.get('http://localhost:3000/api/user/check', {
+                    withCredentials: true
+                })
+                // const { token } = response.data;
+                // console.log("token from useAuth: ", token);
+
+                if (response.status === 200) {
+                    setAuth({ isAuthenticated: true });
                 }
             } catch (error) {
-                setAuth({isAuthenticated:false});                
+                setAuth({ isAuthenticated: false });
             }
         };
         checkAuth();

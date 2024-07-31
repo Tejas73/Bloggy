@@ -46,7 +46,7 @@ const MyBlogs = () => {
         }
 
         return (
-            <div className="border p-3">
+            <div className="border p-3" key={blog.id}>
                 <div className="py-2 " onClick={editThisBlog}>
                     {/* title  */}
                     <div className="text-3xl text-gray-800">{blog.title}</div>

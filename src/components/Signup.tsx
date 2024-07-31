@@ -9,7 +9,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [_, setCookie] = useCookies(["jwt"]);
+  const [_, setCookies] = useCookies(["jwt"]);
 
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -20,10 +20,10 @@ const Signup = () => {
       }, {
         withCredentials: true // Include credentials (cookies) in the request
     });
-      const token = response.data.token;
+      const token = response.data.token; 
       console.log("token",token)
       if (token) {
-        setCookie("jwt", token, { path: "/" });
+        setCookies("jwt", token, { path: "/" });
         console.log("Signup successful: ", token);
         navigate("/profile");
       } else {

@@ -4,13 +4,13 @@ import { currUserId, isLoggedIn } from "@/store/atoms/isLoggedIn";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useCookies, CookiesProvider } from "react-cookie";
-
 import ProfileMenu from "./ProfileMenu";
-
+import axios from "axios";
 
 const Appbar = () => {
-    useAuth(); // make this hook better to be able to use anywhere, example in handleHome function
+    useAuth();
     const auth = useRecoilValue(isLoggedIn);
+    
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
     const setUserId = useSetRecoilState(currUserId)
@@ -20,11 +20,19 @@ const Appbar = () => {
         navigate("/signup");
     };
 
-    const handleLogout = (): void => {
-        removeCookie('jwt', { path: '/' });
-        setAuth({ isAuthenticated: false });
-        setUserId({ userID: null })
-        navigate("/");
+    const handleLogout = async () => {
+        try {
+            const response = await axios.put("http://localhost:3000/api/user/logout",);
+            // console.log("response: ", response);
+            if (response) {
+                removeCookie('jwt', { path: '/' });
+                setAuth({ isAuthenticated: false });
+                setUserId({ userID: null })
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Error in logging out: ", error);
+        }
     }
 
     const handleSigninClick = (): void => {
@@ -38,12 +46,14 @@ const Appbar = () => {
     const handleHome = (): void => {
         navigate('/feed')
     }
-    
 
+   
+    // console.log("cookies.jwt from APPBAR: ", cookies.jwt);
     return (
         <CookiesProvider>
             <div className="flex bg-tgreen justify-between items-center h-20 border-b-2 border-night sticky">
                 <div className="flex justify-between items-center pl-28">
+
                     {/* logo  */}
                     <svg width="56" height="56">
                         <path d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
@@ -52,23 +62,11 @@ const Appbar = () => {
                         <circle cx="28" cy="28" r="7" stroke="black" stroke-width="3" fill="transparent" />
                     </svg>
 
-                    {/* animated logo  */}
-                    {/* <svg width="56" height="56">
-                        <path id="outer-semi-circle" d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="2" fill="transparent" transform="rotate(330, 28, 28)">
-                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="330 28 28" to="690 28 28" dur="3s" repeatCount="indefinite" />
-                        </path>
-
-                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(-30, 28, 28)" />
-                        <circle cx="28" cy="28" r="7" stroke="black" stroke-width="2" fill="transparent" />
-                    </svg> */}
-
-
-
-
                     <div className="font-title text-4xl" onClick={handleHome}>
                         Bloggy
                     </div>
                 </div>
+
                 {/* if logged in then */}
                 {auth.isAuthenticated && <div className="flex items-center w-64 ">
                     {/* write */}
@@ -80,7 +78,7 @@ const Appbar = () => {
 
                     {/* profile */}
                     <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night">
-                       <ProfileMenu></ProfileMenu>
+                        <ProfileMenu></ProfileMenu>
                     </Button>
 
                     {/* logout */}
@@ -91,7 +89,7 @@ const Appbar = () => {
                 </div>}
 
                 {/* if logged out then */}
-                {!auth.isAuthenticated && <div className="flex justify-around items-center w-64">
+                {!auth.isAuthenticated  && <div className="flex justify-around items-center w-64">
 
                     <Button className="bg-transparent text-night hover:bg-tgreen hover:text-slate-400" onClick={handleSigninClick}>Signin</Button>
 

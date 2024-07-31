@@ -45,8 +45,8 @@ const Feed = () => {
         }
 
         return (
-            <div className="border p-3 ">
-                <div className="py-2 " onClick={blog} key={blogs.id}>
+            <div className="border p-3 " key={blogs.id}>
+                <div className="py-2 " onClick={blog} >
 
                     {/* title  */}
                     <div className="text-3xl text-gray-800">{blogs.title}</div>
