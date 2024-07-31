@@ -1,4 +1,4 @@
-//convert into ts
+// set secure:true for PRODUCTION in signin route
 import express from 'express';
 import prisma from '../utils/prismaClient';
 import bcrypt from 'bcryptjs';
@@ -215,7 +215,7 @@ router.put("/profile", passport.authenticate('jwt', { session: false }), async (
     }
 })
 
-
+// route to signin
 router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: express.Response) => {
     const { email, password } = req.body;
     if (!email) {
@@ -249,11 +249,24 @@ router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: exp
     res.json({ message: 'Login successful', token, user })
 })
 
+// route to logout
+router.put("/logout", passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.cookie("jwt", { path: '/' })
+    res.status(200).json({ message: 'user logged out' });
+});
 
 
 
-router.get("/check", passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.status(200).json({ message: 'Authenticated' });
+router.get("/check", passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const userId = (req.user as User).id;
+    const payload = { userId: userId }
+    // console.log("payload from check route: ", payload);
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
+    // console.log("token from check route: ", token);
+
+    res.cookie("jwt", token, { httpOnly: true, secure: false }) //set secure:true for PRODUCTION    
+    res.status(200).json({ message: 'Authenticated', token, userId });
 });
 
 export default router;

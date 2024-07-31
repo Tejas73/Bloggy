@@ -4,7 +4,7 @@ import prisma from "./prismaClient";
 const jwtOptions: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromExtractors([req => req.cookies.jwt]),
 
-secretOrKey: process.env.JWT_SECRET ? process.env.JWT_SECRET : "rKnZc2dIyG3YBZyQSe9pBEGLq8jzH8mM"
+secretOrKey: process.env.JWT_SECRET ? process.env.JWT_SECRET : ""
 };
 
 //callback function
@@ -16,7 +16,7 @@ export const jwtStrategy = new JwtStrategy(jwtOptions, async (payload: { userId:
     
     if (user) {
         // console.log("from auth.ts: ",user);
-        return done(null, user);
+        return done(null, user); 
     } else {
         // console.log("from auth.ts: ",user);
         return done(null, false);
