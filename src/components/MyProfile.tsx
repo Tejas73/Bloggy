@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 
-// improve UI
+// Define TypeScript interfaces for profile and user data
 interface ProfileFields {
     name: string,
     bio: string
@@ -15,48 +15,50 @@ interface UserFields {
 }
 
 const MyProfile = () => {
-    const [userData, setUserData] = useState<UserFields | null>(null);
+    
+    const [userData, setUserData] = useState<UserFields | null>(null);// State to hold the user data fetched from the server
+        
+    const [fetchProfileData, setFetchProfileData] = useState(false);// State to trigger a refetch of the user profile data
 
-    const [updatedEmail, setUpdatedEmail] = useState("");
-    const [editEmail, setEditEmail] = useState(false);
+    const [updatedEmail, setUpdatedEmail] = useState(""); // Holds the updated email value during editing
+    const [editEmail, setEditEmail] = useState(false);// Boolean state to control whether the email input field is visible for editing
 
-    const [updatedPassword, setUpdatedPassword] = useState("");
-    const [editPassword, setEditPassword] = useState(false);
+    const [updatedPassword, setUpdatedPassword] = useState(""); // Holds the updated password value during editing    
+    const [editPassword, setEditPassword] = useState(false);// Boolean state to control whether the password input field is visible for editing
 
-    const [updatedName, setUpdatedName] = useState("");
-    const [editName, setEditName] = useState(false);
+    const [updatedName, setUpdatedName] = useState("");// Holds the updated name value during editing    
+    const [editName, setEditName] = useState(false);// Boolean state to control whether the name input field is visible for editing
 
-    const [updatedBio, setUpdatedBio] = useState("");
-    const [editBio, setEditBio] = useState(false);
+    const [updatedBio, setUpdatedBio] = useState("");// Holds the updated bio value during editing    
+    const [editBio, setEditBio] = useState(false);// Boolean state to control whether the bio input field is visible for editing
 
-    const [fetchProfileData, setFetchProfileData] = useState(false);
-
+    // Fetch user profile data when the component mounts or when fetchProfileData changes
     useEffect(() => {
-        const MyData = async () => {
+        const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/user/myprofile");
                 setUserData(response.data);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error("Error fetching profile data: ", error);
             }
-        }
-        MyData();
-    }, [fetchProfileData])
+        };
+        fetchData();
+    }, [fetchProfileData]);
 
-
+    // Display loading state while fetching data
     if (!userData) {
         return <div>Loading...</div>;
     }
 
     console.log("userData: ", userData);
 
-    // email 
+    // Handle showing input field for editing email
     const showInputEmail = () => {
-        setEditEmail(true);
-        setUpdatedEmail(userData.email)
-    }
+        setEditEmail(true); // Enable email editing mode
+        setUpdatedEmail(userData.email); // Prepopulate the input with the current email
+    };
 
+    // Handle saving updated email
     const handleEditEmail = async () => {
         try {
             const response = await axios.put("/api/user/updateemail", {
@@ -67,22 +69,22 @@ const MyProfile = () => {
 
             if (response.status === 200) {
                 console.log("Email update successful");
-                setFetchProfileData(prev => !prev)
+                setFetchProfileData(prev => !prev); // Trigger refetch of profile data
             } else {
                 console.error("Email update unsuccessful: ", response.data);
             }
-            setEditEmail(false);
-
+            setEditEmail(false); // Exit email editing mode
         } catch (error) {
             console.error("Error during Email update: ", error);
         }
-    }
+    };
 
-    // password 
+    // Handle showing input field for editing password
     const showInputPassword = () => {
-        setEditPassword(true);
-    }
+        setEditPassword(true); // Enable password editing mode
+    };
 
+    // Handle saving updated password
     const handleEditPassword = async () => {
         try {
             const response = await axios.put("/api/user/updatepassword", {
@@ -93,24 +95,23 @@ const MyProfile = () => {
 
             if (response.status === 200) {
                 console.log("Password update successful");
-                setFetchProfileData(prev => !prev)
-
+                setFetchProfileData(prev => !prev); // Trigger refetch of profile data
             } else {
                 console.error("Password update unsuccessful: ", response.data);
-                setEditPassword(false);
-
+                setEditPassword(false); // Exit password editing mode on failure
             }
         } catch (error) {
             console.error("Error during Password update: ", error);
         }
-    }
+    };
 
-    // name 
+    // Handle showing input field for editing name
     const showInputName = () => {
-        setEditName(true);
-        setUpdatedName(userData.profile.name)
-    }
+        setEditName(true); // Enable name editing mode
+        setUpdatedName(userData.profile.name); // Prepopulate the input with the current name
+    };
 
+    // Handle saving updated name
     const handleEditName = async () => {
         try {
             const response = await axios.put("/api/user/updatename", {
@@ -121,24 +122,23 @@ const MyProfile = () => {
 
             if (response.status === 200) {
                 console.log("Name update successful");
-                setFetchProfileData(prev => !prev)
-
+                setFetchProfileData(prev => !prev); // Trigger refetch of profile data
             } else {
                 console.error("Name update unsuccessful: ", response.data);
             }
-            setEditName(false);
-
+            setEditName(false); // Exit name editing mode
         } catch (error) {
             console.error("Error during Name update: ", error);
         }
-    }
+    };
 
-    // bio 
+    // Handle showing input field for editing bio
     const showInputBio = () => {
-        setEditBio(true);
-        setUpdatedBio(userData.profile.bio)
-    }
+        setEditBio(true); // Enable bio editing mode
+        setUpdatedBio(userData.profile.bio); // Prepopulate the input with the current bio
+    };
 
+    // Handle saving updated bio
     const handleEditBio = async () => {
         try {
             const response = await axios.put("/api/user/updatebio", {
@@ -149,30 +149,28 @@ const MyProfile = () => {
 
             if (response.status === 200) {
                 console.log("Bio update successful");
-                setFetchProfileData(prev => !prev)
-
+                setFetchProfileData(prev => !prev); // Trigger refetch of profile data
             } else {
                 console.error("Bio update unsuccessful: ", response.data);
             }
-            setEditBio(false);
-
+            setEditBio(false); // Exit bio editing mode
         } catch (error) {
             console.error("Error during Bio update: ", error);
         }
-    }
+    };
 
+    // Handle cancelling any ongoing edit operation
     const handleCancelEdit = () => {
         try {
-            setEditEmail(false);
-            setEditName(false);
-            setEditBio(false);
-            setEditPassword(false);
-            setUpdatedPassword("");
-
+            setEditEmail(false); // Exit email editing mode
+            setEditName(false); // Exit name editing mode
+            setEditBio(false); // Exit bio editing mode
+            setEditPassword(false); // Exit password editing mode
+            setUpdatedPassword(""); // Clear updated password
         } catch (error) {
             console.error("Error cancelling fields");
         }
-    }
+    };
 
     return (
         <div>
@@ -311,6 +309,6 @@ const MyProfile = () => {
             </div>
         </div>
     )
-}
+};
 
 export default MyProfile;

@@ -5,8 +5,7 @@ import useAuth from '@/hooks/useAuth';
 import { currUserId, isLoggedIn } from '@/store/atoms/isLoggedIn';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currCommentState, editCommentState, selectedCommentIdState } from '@/store/atoms/commentAtoms';
-// import { currUserIdSelector } from '@/store/selectors/currUserIdSelector';
+import { currCommentState, editCommentState, selectedCommentIdState, selectedCommentState } from '@/store/atoms/commentAtoms';
 import { useCookies } from 'react-cookie';
 
 // optimze the re-renders caused by the useEffect
@@ -14,11 +13,13 @@ import { useCookies } from 'react-cookie';
 interface CommentMenuProps {
     userId: string;
     id: string;
+    comment:string;
 }
 
 const CommentMenu: React.FC<CommentMenuProps> = ({
     id,
-    userId
+    userId,
+    comment
 }) => {
     useAuth();
 
@@ -29,6 +30,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     const [comments, setComments] = useRecoilState(currCommentState); // currCommentState holds all the current blog comments
     const setIsEditComment = useSetRecoilState(editCommentState) // used for editing a comment based on boolean value of editCommentState
     const [authUserId, setAuthUserId] = useRecoilState(currUserId);
+    const setSelectedComment = useSetRecoilState(selectedCommentState);
     const [cookie, setCookie] = useCookies(['jwt']);
 
     useEffect(() => {
@@ -52,6 +54,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     const handleClickEditComment = async () => {
         setSelectedCommentId(id);
         setIsEditComment(true);
+        setSelectedComment(comment);
     };
 
     const handleDeleteComment = async () => {
