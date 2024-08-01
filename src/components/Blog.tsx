@@ -2,8 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import sanitizeHtml from 'sanitize-html';
-// import BlogComment from "../utility-components/BlogComment";
-import BlogCommentTest from "@/utility-components/BlogCommentTest";
+import BlogComment from "../utility-components/BlogComment";
 
 interface OpenedBlogFields {
     title: string,
@@ -38,8 +37,7 @@ const Blog = () => {
                 {/* description  */}
                 <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(openedBlog?.description || '') }} />
 
-                {/* <BlogComment />  */}
-                <BlogCommentTest />
+                <BlogComment /> 
             </div>
         </div>
     );

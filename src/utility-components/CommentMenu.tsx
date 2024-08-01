@@ -9,8 +9,7 @@ import { currCommentState, editCommentState, selectedCommentIdState } from '@/st
 // import { currUserIdSelector } from '@/store/selectors/currUserIdSelector';
 import { useCookies } from 'react-cookie';
 
-//when refreshed authUserId.userID is null, so need to fix
-//need a better way to solve this problem because the commented solution below from ChatGPT involves too many renders
+// optimze the re-renders caused by the useEffect
 //improve UI
 interface CommentMenuProps {
     userId: string;
@@ -68,10 +67,10 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
         }
     };
 
-    console.log("cookies.jwt from COMMENTMENU:", cookie.jwt); //exists
-    console.log("authState.isAuthenticated from COMMENTMENU:", authState.isAuthenticated); // true
-    console.log("authUserId.userID from COMMENTMENU:", authUserId.userID); // null
-    console.log("userId from COMMENTMENU:", userId);
+    // console.log("cookies.jwt from COMMENTMENU:", cookie.jwt);
+    // console.log("authState.isAuthenticated from COMMENTMENU:", authState.isAuthenticated); 
+    // console.log("authUserId.userID from COMMENTMENU:", authUserId.userID); 
+    // console.log("userId from COMMENTMENU:", userId);
 
     return (
         <div>

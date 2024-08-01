@@ -47,8 +47,8 @@ router.post("/createComment/:blogId", passport.authenticate("jwt", { session: fa
                 profile: { connect: { id: userProfile.id } },
                 likes: {
                     create: {
-                        user: {connect: {id: userId}},
-                        liked:false,
+                        user: { connect: { id: userId } },
+                        liked: false,
                         disliked: false
                     }
                 }
@@ -96,9 +96,8 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
 });
 
 //route to update like in the comment
-router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }, {}, { liked: boolean; disliked: boolean }>, res: express.Response) => {
+router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }>, res: express.Response) => {
     const { commentId } = req.params;
-    const { liked } = req.body; //boolean
     const userId = (req.user as User).id;
 
     if (!commentId) {
@@ -106,41 +105,67 @@ router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { sessi
     }
 
     try {
-        const updatedLike = await prisma.commentLike.upsert({
-            where: {
-                userId_commentId: { userId: userId, commentId: commentId }
-            },
-            update: {
-                liked: liked,
-                disliked: !liked,
-            },
-            create: {
-                liked: liked,
-                disliked: !liked,
-                userId: userId,
-                commentId: commentId
-            }
+        // Fetch the current status
+        const existingLike = await prisma.commentLike.findUnique({
+            where: { userId_commentId: { userId, commentId } }
         });
 
-        await prisma.comment.update({
-            where: { id: commentId },
-            data: {
-                commentLikes: liked ? { increment: 1 } : { decrement: 1 },
-                commentDislikes: !liked ? { decrement: 1 } : {}
-            }
-        })
-        return res.json({ message: 'Comment like updated successfully', updatedLike });
+        if (existingLike) {
+            const liked = !existingLike.liked;
+            const disliked = false;
 
+            // Toggle the like/dislike status
+            const updatedLike = await prisma.commentLike.update({
+                where: { userId_commentId: { userId, commentId } },
+                data: {
+                    liked,
+                    disliked
+                }
+            });
+
+            // Update comment like/dislike counts
+            const likeChange = liked ? 1 : -1;
+            const dislikeChange = existingLike.disliked ? -1 : 0;
+
+            await prisma.comment.update({
+                where: { id: commentId },
+                data: {
+                    commentLikes: { increment: likeChange },
+                    commentDislikes: { increment: dislikeChange }
+                }
+            })
+
+            return res.json({ message: 'Comment like updated successfully', updatedLike });
+        } else {
+            // Create a new entry if it does not exist
+            const newLike = await prisma.commentLike.create({
+                data: {
+                    liked: true,
+                    disliked: false,
+                    userId,
+                    commentId
+                }
+            });
+
+            // Update comment like/dislike counts
+            await prisma.comment.update({
+                where: { id: commentId },
+                data: {
+                    commentLikes: { increment: 1 }
+                }
+            });
+
+            return res.json({ message: 'Comment like added successfully', newLike });
+        }
     } catch (error) {
         console.log("Error updating like/unlike: ", error);
-        return res.status(500).json({ message: 'Error updating comment like/dislike' });
+        return res.status(500).json({ message: 'Error updating comment like' });
     }
 });
 
 //route to update dislike in the comment
-router.put("/updatecommentdislike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }, {}, { liked: boolean; disliked: boolean }>, res: express.Response) => {
+router.put("/updatecommentdislike/:commentId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ commentId: string }>, res: express.Response) => {
     const { commentId } = req.params;
-    const { disliked } = req.body; //boolean
     const userId = (req.user as User).id;
 
     if (!commentId) {
@@ -148,34 +173,61 @@ router.put("/updatecommentdislike/:commentId", passport.authenticate("jwt", { se
     }
 
     try {
-        const updatedDislike = await prisma.commentLike.upsert({
-            where: {
-                userId_commentId: { userId: userId, commentId: commentId }
-            },
-            update: {
-                liked: !disliked,
-                disliked: disliked
-            },
-            create: {
-                liked: !disliked,
-                disliked: disliked,
-                userId: userId,
-                commentId: commentId
-            }
+        // Fetch the current dislike entry
+        const existingDislike = await prisma.commentLike.findUnique({
+            where: { userId_commentId: { userId, commentId } }
         });
 
-        await prisma.comment.update({
-            where: { id: commentId },
-            data: {
-                commentLikes: !disliked ? { decrement: 1 } : {},
-                commentDislikes: disliked ? { increment: 1 } : { decrement: 1 }
-            }
-        });
-        return res.json({ message: 'Comment dislike updated successfully', updatedDislike });
+        if (existingDislike) {
+            const liked = false;
+            const disliked = !existingDislike.disliked;
 
+            // Update the dislike status
+            const updatedDislike = await prisma.commentLike.update({
+                where: { userId_commentId: { userId, commentId } },
+                data: {
+                    liked,
+                    disliked
+                }
+            });
+
+            // Update comment like/dislike counts
+            const likeChange = existingDislike.liked ? -1 : 0;
+            const dislikeChange = disliked ? 1 : -1;
+
+            await prisma.comment.update({
+                where: { id: commentId },
+                data: {
+                    commentLikes: { increment: likeChange },
+                    commentDislikes: { increment: dislikeChange }
+                }
+            });
+
+            return res.json({ message: 'Comment dislike updated successfully', updatedDislike });
+        } else {
+            // Create a new entry if it does not exist
+            const newLike = await prisma.commentLike.create({
+                data: {
+                    liked: false,
+                    disliked: true,
+                    userId,
+                    commentId
+                }
+            });
+
+            // Update comment like/dislike counts
+            await prisma.comment.update({
+                where: { id: commentId },
+                data: {
+                    commentDislikes: { increment: 1 }
+                }
+            });
+
+            return res.json({ message: 'Comment like added successfully', newLike });
+        }
     } catch (error) {
-        console.log("Error updating like/dislike: ", error);
-        return res.status(500).json({ message: 'Error updating comment like/dislike' });
+        console.log("Error updating dislike: ", error);
+        return res.status(500).json({ message: 'Error updating comment dislike' });
     }
 });
 
@@ -233,22 +285,28 @@ router.delete("/deletecomment", passport.authenticate("jwt", { session: false })
             res.status(404).json({ message: 'Comment not found' });
         }
         if (existingComment?.userId === userId) {
+
+            await prisma.commentLike.deleteMany({
+                where: { commentId: id }
+            })
+
             const deleteComment = await prisma.comment.delete({
                 where: { id }
             });
-            if (deleteComment) {
-                res.status(200).json({ message: 'Comment deleted successfully' });
+
+             if (deleteComment) {
+                return res.status(200).json({ message: 'Comment deleted successfully' });
             } else {
                 return res.status(403).json({ message: 'Unauthorized to delete this comment' });
             }
+        } else {
+            return res.status(403).json({ message: 'Unauthorized to delete this comment' });
         }
-
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error deleting comment' });
+        return res.status(500).json({ message: 'Error deleting comment' });
     }
-
-})
+});
 
 //show user their comments in My Profile for each user
 router.get("/allComments/user/:userId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ userId: string }, {}, {}>, res: express.Response) => {
@@ -273,89 +331,3 @@ router.get("/allComments/user/:userId", passport.authenticate("jwt", { session: 
 })
 
 export default router;
-
-// const existingLike = await prisma.commentLike.findUnique({
-//     where: {
-//         userId_commentId: {
-//             userId,
-//             commentId
-//         }
-//     }
-// });
-
-// if (existingLike) {
-//     await prisma.commentLike.update({
-//         where: {
-//             userId_commentId: {
-//                 userId,
-//                 commentId
-//             }
-//         },
-//         data: {
-//             liked,
-//             disliked
-//         }
-
-//     });
-
-//     if (liked && !existingLike.liked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: {
-//                 commentLikes: { increment: 1 },
-//                 commentDislikes: existingLike.disliked ? { decrement: 1 } : undefined
-//             }
-//         });
-//     }
-//     else if (liked && existingLike.liked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: {
-//                 commentLikes: { decrement: 1 }
-//             }
-//         });
-//     }
-
-//     if (disliked && !existingLike.disliked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: {
-//                 commentDislikes: { increment: 1 },
-//                 commentLikes: existingLike.liked ? { decrement: 1 } : undefined
-//             }
-//         });
-//     }
-//     else if (disliked && existingLike.disliked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: {
-//                 commentDislikes: { decrement: 1 }
-//             }
-//         })
-//     }
-// }
-
-// else {
-//     await prisma.commentLike.create({
-//         data: {
-//             user: { connect: { id: userId } },
-//             comment: { connect: { id: commentId } },
-//             liked,
-//             disliked
-//         }
-//     });
-
-//     if (liked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: {
-//                 commentLikes: { increment: 1 }
-//             }
-//         });
-//     } else if (disliked) {
-//         await prisma.comment.update({
-//             where: { id: commentId },
-//             data: { commentDislikes: { increment: 1 } }
-//         });
-//     }
-// }

@@ -13,11 +13,11 @@ const useAuth = async () => {
                 const response = await axios.get('http://localhost:3000/api/user/check', {
                     withCredentials: true
                 })
-                console.log("response.data.token: ", response.data.token);
+                // console.log("response.data.token: ", response.data.token);
                 const { token } = response.data;
 
                 if (token) {
-                    setCookie("jwt", token, { path: "/" });
+                    // setCookie("jwt", token, { path: "/" });
                     setAuth({ isAuthenticated: true });
                 } else {
                     setAuth({ isAuthenticated: false });

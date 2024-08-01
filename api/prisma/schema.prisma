@@ -58,8 +58,8 @@ model Comment {
 
 model CommentLike {
   id        String  @id @default(uuid())
-  liked     Boolean
-  disliked  Boolean
+  liked     Boolean @default(false)
+  disliked  Boolean @default(false)
   user      User    @relation(fields: [userId], references: [id])
   userId    String
   comment   Comment @relation(fields: [commentId], references: [id])

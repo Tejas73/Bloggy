@@ -29,7 +29,7 @@ const Feed = () => {
         const currBlogs = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/blog/allblogs")
-                console.log(response.data);
+                console.log("response.data: ", response.data);
                 setFeed(response.data);
             } catch (error) {
                 console.error("Error fetching feed data: ", error);
