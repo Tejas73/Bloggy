@@ -62,7 +62,7 @@ router.post("/createComment/:blogId", passport.authenticate("jwt", { session: fa
     }
 });
 
-//get comments for a blog
+//show comments for a blog
 router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ blogId: string }, {}, {}>, res: express.Response) => {
     const { blogId } = req.params;
 
@@ -79,9 +79,10 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
                     select: { name: true }
                 },
                 likes: {
-                    select: {
-                        liked: true,
-                        disliked: true
+                    select:{
+                        liked:true,
+                        disliked: true,
+                        userId:true
                     }
                 }
             }

@@ -40,7 +40,6 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
                     withCredentials: true
                 });
                 const { userId } = response.data;
-                // return userId ? { userID: userId } : { userID: null };
                 if (userId) {
                     setAuthUserId({ userID: userId })
                 }

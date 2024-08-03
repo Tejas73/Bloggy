@@ -8,4 +8,4 @@ export const isLoggedIn = atom({
 export const currUserId = atom({
     key: 'currUserId',
     default: { userID: null }
-}); 
+  });
