@@ -28,7 +28,7 @@ const Blog = () => {
 
     return (
         <div className="flex justify-center">
-            <div className="bg-white p-4 w-full max-w-4xl"> 
+            <div className="bg-white p-4 w-full max-w-4xl">
                 {/* title  */}
                 <div className="mb-4 text-5xl font-title">
                     {openedBlog?.title}
@@ -37,7 +37,9 @@ const Blog = () => {
                 {/* description  */}
                 <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(openedBlog?.description || '') }} />
 
-                <BlogComment /> 
+                <div className="pt-9">
+                    <BlogComment />
+                </div>
             </div>
         </div>
     );

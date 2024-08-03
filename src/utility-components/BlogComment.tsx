@@ -9,7 +9,7 @@ import { currCommentState, selectedCommentIdState, selectedCommentState } from "
 import { editCommentState } from "@/store/atoms/commentAtoms";
 import CommentMenu from "./CommentMenu";
 import { currUserId } from "@/store/atoms/isLoggedIn";
-import { DislikeBtn, LikeBtn } from "@/components/ui/svg-elements";
+import { CommentBtn, DislikeBtn, LikeBtn } from "@/components/ui/svg-elements";
 
 //improve UI
 //the like and dislike button should glow if their respective values are true
@@ -119,6 +119,7 @@ const BlogComment = () => {
     const handleCancelEditComment = () => {
         setIsEditing(false);
         setEditedComment("");
+        setComment("");
         setSelectedCommentId(null);
     }
 
@@ -143,60 +144,75 @@ const BlogComment = () => {
     };
 
     const showBlogComments = currBlogComments.map((comment) => (
-        <div key={comment.id}>
-            <div className="flex justify-between border border-slate-400">
 
-                {/* when user clicks on edit  */}
-                {isEditing && selectedCommentId === comment.id ? (
+        <div key={comment.id} className="flex justify-between py-4 ">
 
-                    <div>
-                        <div>
-                            <input
-                                type="text"
-                                id="comment"
-                                value={editedComment}
-                                onChange={(e) => setEditedComment(e.target.value)}
-                            />
-
-                        </div>
-                        <div>
-                            <Button onClick={() => handleEditComment(comment.id)}>Save</Button>
-                            <Button onClick={handleCancelEditComment}>Cancel</Button>
-                        </div>
-                    </div>) : (
-                    // when user is not editing
-                    <div>
-                        <span className="text-gray-500 text-sm">{comment.profile.name}</span>
-                        <div>{comment.comment}</div>
-
-                        <div className="flex">
-                            {/* like  */}
-                            <div className="" onClick={() => handleLikeButton(comment.id)}>
-                                {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
-                                    <LikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.liked)} />
-                                ) : (
-                                    <LikeBtn fillColor={false} />
-                                )}
-                            </div>
-                            <span>{comment.commentLikes}</span>
-
-                            {/* dislike  */}
-                            <div className="" onClick={() => handleDislikeButton(comment.id)}>
-                                {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
-                                    <DislikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.disliked)} />
-                                ) : (
-                                    <DislikeBtn fillColor={false} />
-                                )}
-                            </div>
-                            <span>{comment.commentDislikes}</span>
-
-                        </div>
-                    </div>
-                )}
+            {/* when user clicks on edit  */}
+            {isEditing && selectedCommentId === comment.id && comment.userId===thisUserId ? (
 
                 <div>
-                    <CommentMenu id={comment.id} userId={comment.userId} comment={comment.comment} />
+
+                    <div >
+                        <Input
+                            type="text"
+                            id="comment"
+                            value={editedComment}
+                            onChange={(e) => setEditedComment(e.target.value)}
+                            className="border-2 w-96"
+                        />
+
+                    </div>
+
+                    <div className="flex  p-2">
+                        {/* Cancel  */}
+                        <Button onClick={handleCancelEditComment}
+                            className="m-1 rounded-full">
+                            Cancel
+                        </Button>
+
+                        {/* Save  */}
+                        <Button onClick={() => handleEditComment(comment.id)}
+                            className="mr-1 mt-1 rounded-full ">
+                            Save
+                        </Button>
+                    </div>
+
+                </div>) : (
+                // when user is not editing
+                <div>
+                    <span className="text-gray-500 text-sm">{comment.profile.name}</span>
+                    <div>{comment.comment}</div>
+
+                    <div className="flex">
+                        {/* like  */}
+                        <div className="" onClick={() => handleLikeButton(comment.id)}>
+                            {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
+                                <LikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.liked)} />
+                            ) : (
+                                <LikeBtn fillColor={false} />
+                            )}
+                        </div>
+                        <span>{comment.commentLikes}</span>
+
+                        {/* dislike  */}
+                        <div className="" onClick={() => handleDislikeButton(comment.id)}>
+                            {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
+                                <DislikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.disliked)} />
+                            ) : (
+                                <DislikeBtn fillColor={false} />
+                            )}
+                        </div>
+                        <span>{comment.commentDislikes}</span>
+
+                    </div>
                 </div>
+            )}
+
+            <div className="w-6 h-fit" >
+                {isEditing && selectedCommentId === comment.id && comment.userId===thisUserId ?
+                    (<></>) : (
+                        <CommentMenu id={comment.id} userId={comment.userId} comment={comment.comment} />
+                    )}
             </div>
         </div>
     ));
@@ -204,22 +220,33 @@ const BlogComment = () => {
     console.log("currBlogComments: ", currBlogComments);
 
     return (
-        <div className="container bg-zomp">
-            <div>Comments</div>
-            <div>
+        <div className="container">
+            <div className="text-2xl" >Responses</div>
+            <hr className="h-px mt-1 mb-2 bg-gray-300 border-0 dark:bg-gray-700" />
+
+            <div className=" pt-5">
                 <Input
                     type="text"
                     id="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Add a comment"
+                    className="border-2"
                 />
 
-                <Button onClick={handleCreateComment}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-                    </svg>
-                </Button>
+                <div className="flex flex-row-reverse p-2">
+                    {/* Save  */}
+                    <Button onClick={handleCreateComment}
+                        className="ml-1 mt-1 rounded-full"
+                    >
+                        <CommentBtn></CommentBtn>
+                    </Button>
+
+                    {/* Cancel  */}
+                    <Button onClick={handleCancelEditComment}
+                        className="m-1 rounded-full"
+                    >Cancel</Button>
+                </div>
             </div>
             <div>
                 {showBlogComments}
@@ -229,14 +256,3 @@ const BlogComment = () => {
 };
 
 export default BlogComment;
-
-
-{/* {(prop.liked === true) && prop.userId === thisUserId && (
-                                            <LikeBtn fillColor={true} />
-                                        )}
-
-                                        {(prop.liked === false) && prop.userId === thisUserId ? (
-                                            <LikeBtn fillColor={false} />
-                                        ) : (
-                                            <LikeBtn fillColor={false} />
-                                        )} */}

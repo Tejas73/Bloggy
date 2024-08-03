@@ -8,6 +8,7 @@ import draftToHtml from 'draftjs-to-html';
 import sanitizeHtml from 'sanitize-html';
 import axios from 'axios';
 import ProfileMenu from '@/utility-components/ProfileMenu';
+import { LogoBLoggy } from './ui/svg-elements';
 
 interface OpenedBlogFields {
     title: string,
@@ -93,12 +94,7 @@ const EditBlog = () => {
             <div className="flex bg-zomp justify-around items-center h-20 border-b-2 border-night sticky">
                 <div className=" flex justify-between items-center">
                     {/* logo  */}
-                    <svg width="56" height="56">
-                        <path d="M7,28 A21,21 0 0,1 49,28" stroke="black" strokeWidth="3" fill="transparent" transform="rotate(330, 28, 28)" />
-                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" strokeWidth="3" fill="transparent" transform="rotate(150, 28, 28)" />
-                        <path d="M14,28 A14,7 0 0,1 42,28" stroke="black" strokeWidth="3" fill="transparent" transform="rotate(330, 28, 28)" />
-                        <circle cx="28" cy="28" r="7" stroke="black" strokeWidth="3" fill="transparent" />
-                    </svg>
+                    <LogoBLoggy />
                     <div className="font-title text-4xl mr-40" onClick={handleFeed}>
                         Bloggy
                     </div>

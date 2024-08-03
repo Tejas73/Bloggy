@@ -6,6 +6,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useCookies, CookiesProvider } from "react-cookie";
 import ProfileMenu from "./ProfileMenu";
 import axios from "axios";
+import { LogoBLoggy, Logout, WritePencil } from "@/components/ui/svg-elements";
 
 const Appbar = () => {
     useAuth();
@@ -55,12 +56,7 @@ const Appbar = () => {
                 <div className="flex justify-between items-center pl-28">
 
                     {/* logo  */}
-                    <svg width="56" height="56">
-                        <path d="M7,28 A21,21 0 0,1 49,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
-                        <path d="M14,28 A14,14 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(150, 28, 28)" />
-                        <path d="M14,28 A14,7 0 0,1 42,28" stroke="black" stroke-width="3" fill="transparent" transform="rotate(330, 28, 28)" />
-                        <circle cx="28" cy="28" r="7" stroke="black" stroke-width="3" fill="transparent" />
-                    </svg>
+                    <LogoBLoggy />
 
                     <div className="font-title text-4xl" onClick={handleHome}>
                         Bloggy
@@ -69,11 +65,10 @@ const Appbar = () => {
 
                 {/* if logged in then */}
                 {auth.isAuthenticated && <div className="flex items-center w-64 ">
+
                     {/* write */}
                     <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleWrite}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                        </svg>
+                        <WritePencil />
                     </Button>
 
                     {/* profile */}
@@ -83,8 +78,7 @@ const Appbar = () => {
 
                     {/* logout */}
                     <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleLogout}>
-                        <svg className="size-7 " width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" />  <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />  <path d="M7 12h14l-3 -3m0 6l3 -3" /></svg>
+                        <Logout />
                     </Button>
                 </div>}
 

@@ -36,7 +36,7 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* svg  */}
+          {/* Decoration  */}
           <div className=' mt-7'>
             <SvgSquares></SvgSquares>
           </div>
