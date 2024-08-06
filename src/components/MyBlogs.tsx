@@ -5,7 +5,7 @@ import sanitizeHtml from 'sanitize-html';
 import { useNavigate } from "react-router-dom";
 
 // improve UI
-//add editing the blogs feature using createBlog(use put request)
+//add delete feature of a blog
 interface BlogField {
     title: string,
     description: string,

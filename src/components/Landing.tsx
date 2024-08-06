@@ -3,7 +3,6 @@ import Appbar from '../utility-components/Appbar';
 import { useNavigate } from 'react-router-dom';
 import { SvgSquares } from './ui/svg-elements';
 
-//improve UI
 
 const Landing = () => {
   const navigate = useNavigate()

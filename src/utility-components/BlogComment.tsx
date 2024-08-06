@@ -11,9 +11,6 @@ import CommentMenu from "./CommentMenu";
 import { currUserId } from "@/store/atoms/isLoggedIn";
 import { CommentBtn, DislikeBtn, LikeBtn } from "@/components/ui/svg-elements";
 
-//improve UI
-//the like and dislike button should glow if their respective values are true
-
 interface Like {
     liked: boolean;
     disliked: boolean;
@@ -41,27 +38,10 @@ const BlogComment = () => {
     const [isEditing, setIsEditing] = useRecoilState(editCommentState); // used for editing a comment based on boolean value of editCommentState
     const [editedComment, setEditedComment] = useState(''); //used to store the text during editing before sending it to the BE
     const selectedComment = useRecoilValue(selectedCommentState);
-    const [authUserId, setAuthUserId] = useRecoilState(currUserId);
+    const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
-
-    //optimize this useEffect for getCurrUserId
-    useEffect(() => {
-        const getCurrUserId = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/api/user/check', {
-                    withCredentials: true
-                });
-                const { userId } = response.data;
-                if (userId) {
-                    setAuthUserId({ userID: userId })
-                }
-            } catch (error) {
-                console.error("Error fetching current userID :", error);
-            }
-        }
-        getCurrUserId();
-    }, []);
-
+    console.log("authUserId: ", authUserId);
+    console.log("thisUserId: ", thisUserId);
 
     const getComments = async () => {
         try {
@@ -148,7 +128,7 @@ const BlogComment = () => {
         <div key={comment.id} className="flex justify-between py-4 ">
 
             {/* when user clicks on edit  */}
-            {isEditing && selectedCommentId === comment.id && comment.userId===thisUserId ? (
+            {isEditing && selectedCommentId === comment.id && comment.userId === thisUserId ? (
 
                 <div>
 
@@ -186,21 +166,21 @@ const BlogComment = () => {
                     <div className="flex">
                         {/* like  */}
                         <div className="" onClick={() => handleLikeButton(comment.id)}>
-                            {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
-                                <LikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.liked)} />
-                            ) : (
-                                <LikeBtn fillColor={false} />
-                            )}
+                            <LikeBtn
+                                fillColor={comment.likes.some(
+                                    (prop: Like) => prop.userId === thisUserId && prop.liked
+                                )}
+                            />                            
                         </div>
                         <span>{comment.commentLikes}</span>
 
                         {/* dislike  */}
                         <div className="" onClick={() => handleDislikeButton(comment.id)}>
-                            {comment.likes.some((prop: Like) => prop.userId === thisUserId) ? (
-                                <DislikeBtn fillColor={comment.likes.some((prop: Like) => prop.userId === thisUserId && prop.disliked)} />
-                            ) : (
-                                <DislikeBtn fillColor={false} />
-                            )}
+                            <DislikeBtn
+                                fillColor={comment.likes.some(
+                                    (prop: Like) => prop.userId === thisUserId && prop.disliked
+                                )}
+                            />
                         </div>
                         <span>{comment.commentDislikes}</span>
 
@@ -209,7 +189,7 @@ const BlogComment = () => {
             )}
 
             <div className="w-6 h-fit" >
-                {isEditing && selectedCommentId === comment.id && comment.userId===thisUserId ?
+                {isEditing && selectedCommentId === comment.id && comment.userId === thisUserId ?
                     (<></>) : (
                         <CommentMenu id={comment.id} userId={comment.userId} comment={comment.comment} />
                     )}

@@ -1,5 +1,4 @@
 
-import React, { useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import useAuth from '@/hooks/useAuth';
 import { currUserId, isLoggedIn } from '@/store/atoms/isLoggedIn';
@@ -9,7 +8,6 @@ import { currCommentState, editCommentState, selectedCommentIdState, selectedCom
 import { DeleteBin, EditPencil, ThreeDotsMenu } from '@/components/ui/svg-elements';
 
 // optimze the re-renders caused by the useEffect
-//improve UI
 interface CommentMenuProps {
     userId: string;
     id: string;
@@ -27,25 +25,11 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     const setSelectedCommentId = useSetRecoilState(selectedCommentIdState);
     const [comments, setComments] = useRecoilState(currCommentState); // currCommentState holds all the current blog comments
     const setIsEditComment = useSetRecoilState(editCommentState) // used for editing a comment based on boolean value of editCommentState
-    const [authUserId, setAuthUserId] = useRecoilState(currUserId);
     const setSelectedComment = useSetRecoilState(selectedCommentState);
+    const authUserId = useRecoilValue(currUserId);
+    const thisUserId = authUserId.userID;
 
-    useEffect(() => {
-        const getCurrUserId = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/api/user/check', {
-                    withCredentials: true
-                });
-                const { userId } = response.data;
-                if (userId) {
-                    setAuthUserId({ userID: userId })
-                }
-            } catch (error) {
-                console.error("Error fetching current userID :", error);
-            }
-        }
-        getCurrUserId();
-    }, []);
+ 
 
     const handleClickEditComment = async () => {
         setSelectedCommentId(id);
@@ -68,7 +52,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
 
     return (
         <div>
-            {authState.isAuthenticated && userId === authUserId.userID && (
+            {authState.isAuthenticated && userId === thisUserId && (
                 <div >
 
                     {/* three dots */}

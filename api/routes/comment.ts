@@ -73,16 +73,16 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
     try {
         const blogComments = await prisma.comment.findMany({
             where: { blogId },
-            include: {
+            include: { 
                 user: true,
                 profile: {
                     select: { name: true }
                 },
                 likes: {
-                    select:{
-                        liked:true,
+                    select: {
+                        liked: true,
                         disliked: true,
-                        userId:true
+                        userId: true
                     }
                 }
             }
@@ -106,7 +106,7 @@ router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { sessi
     }
 
     try {
-        // Fetch the current status
+        // Fetch the current like status
         const existingLike = await prisma.commentLike.findUnique({
             where: { userId_commentId: { userId, commentId } }
         });
@@ -115,7 +115,7 @@ router.put("/updatecommentlike/:commentId", passport.authenticate("jwt", { sessi
             const liked = !existingLike.liked;
             const disliked = false;
 
-            // Toggle the like/dislike status
+            // Update the like status
             const updatedLike = await prisma.commentLike.update({
                 where: { userId_commentId: { userId, commentId } },
                 data: {
@@ -295,7 +295,7 @@ router.delete("/deletecomment", passport.authenticate("jwt", { session: false })
                 where: { id }
             });
 
-             if (deleteComment) {
+            if (deleteComment) {
                 return res.status(200).json({ message: 'Comment deleted successfully' });
             } else {
                 return res.status(403).json({ message: 'Unauthorized to delete this comment' });

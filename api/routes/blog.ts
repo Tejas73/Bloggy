@@ -16,7 +16,8 @@ router.post("/createblog", passport.authenticate("jwt", { session: false }), asy
     try {
         const { title, description } = req.body;
         const sanitizedDescription = sanitizeHtml(description);
-        const userId = (req.user as User).id
+        const userId = (req.user as User).id;
+        let blogId;
 
         const userProfile = await prisma.profile.findUnique({
             where: { userId }
@@ -33,7 +34,13 @@ router.post("/createblog", passport.authenticate("jwt", { session: false }), asy
                 title,
                 description: sanitizedDescription,
                 author: { connect: { id: userProfile.userId } },
-                profile: { connect: { id: userProfile.id } }
+                profile: { connect: { id: userProfile.id } },
+                blogLikes:{
+                    create:{
+                        blogliked: false,
+                        userId,
+                    }
+                }
             }
         })
 
@@ -49,14 +56,71 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
     try {
         const showBlogs = await prisma.blog.findMany({
             include: {
-                profile: true
+                profile: true,
+                comments: true,
+                blogLikes: true
             },
         });
         res.json({ message: "Fetching of all Blogs successful", showBlogs })
     } catch (error) {
         console.error("Error getting all blogs: ", error)
     }
-})
+});
+
+//update blog likes  
+router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
+    const { blogId } = req.params;
+    const userId = (req.user as User).id;
+
+    if (!blogId) {
+        return res.status(400).json({ message: "Missing blog ID" });
+    }
+    try {
+        const existingBlogLike = await prisma.blogLike.findUnique({
+            where: { userId_blogId: { userId, blogId } }
+        })
+
+        if (existingBlogLike) {
+            const blogLiked = !existingBlogLike.blogliked;
+
+        const updatedBlogLike = await prisma.blogLike.update({
+            where: { userId_blogId: { userId, blogId } },
+            data: { blogliked: blogLiked }
+        });
+
+
+            const likeChange = blogLiked ? 1 : -1;
+
+        await prisma.blog.update({
+            where: { id: blogId },
+            data: { blogLike: {increment: likeChange} }
+        })
+
+        return res.json({ message: 'Blog like updated successfully', updatedBlogLike });
+        }
+        else {
+            const newBlogLike = await prisma.blogLike.create({
+                data: {
+                    blogliked: true,
+                    userId,
+                    blogId
+                }
+            });
+
+            await prisma.blog.update({
+                where: { id: blogId },
+                data: {
+                    blogLike: { increment: 1 }
+                }
+            });
+
+            return res.json({ message: 'Blog like added successfully', newBlogLike });
+
+        }
+    } catch (error) {
+        console.error("Error updating blog likes: ", error)
+    }
+});
 
 //get user's personal blogs
 router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
@@ -106,7 +170,7 @@ router.put("/updatemyblog/:blogId", passport.authenticate("jwt", { session: fals
         const { title, description } = req.body
         const sanitizedDescription = sanitizeHtml(description);
         const updatedBlog = await prisma.blog.update({
-            where: { 
+            where: {
                 id: blogId
             },
             data: {
