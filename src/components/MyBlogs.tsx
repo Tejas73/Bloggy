@@ -3,19 +3,30 @@ import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 import sanitizeHtml from 'sanitize-html';
 import { useNavigate } from "react-router-dom";
+import { BlogLike, CommentBubble } from "@/ui/svg-elements";
 
 // improve UI
-//add delete feature of a blog
+//add a three dot menu for edit and delete feature of a blog
+// when clicked on the blog, instead of editing EditBlog, Blog should be called
+interface BlogLikes {
+    blogId: string,
+    blogliked: boolean,
+    userId: string
+}
+
 interface BlogField {
     title: string,
     description: string,
     id: string,
+    blogLike: number,
     profile: {
         bio: string,
         id: string,
         name: string,
         userId: string
-    }
+    },
+    comments: { length: number },
+    blogLikes: Array<BlogLikes>
 }
 
 interface MyBlogsField {
@@ -25,6 +36,7 @@ interface MyBlogsField {
 const MyBlogs = () => {
     const [myblogs, setMyblogs] = useState<MyBlogsField | null>(null);
     const navigate = useNavigate();
+
     useEffect(() => {
         const currBlogs = async () => {
             try {
@@ -65,6 +77,27 @@ const MyBlogs = () => {
                             dangerouslySetInnerHTML={{ __html: sanitizeHtml(blog.description || '').trim() }}
                         />
                     </div>
+
+                    <div className="flex pt-5">
+
+                        {/* blog like  */}
+                        <div className="hover:cursor-pointer">
+                            <BlogLike fillColor={true} />
+                        </div>
+                        <div>
+                            {blog.blogLike}
+                        </div>
+
+
+                        {/* blog comments  */}
+                        <div className="hover:cursor-pointer pl-3">
+                            <CommentBubble />
+                        </div>
+                        <div className="hover:cursor-pointer" >
+                            {blog.comments.length}
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         )

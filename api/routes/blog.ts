@@ -67,6 +67,27 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
     }
 });
 
+//get user's personal blogs
+router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
+    console.log("myblogs called")
+    try {
+        const myBlogs = await prisma.blog.findMany({
+            where: {
+                authorId: (req.user as User).id
+            },
+            include: {
+                profile: true,
+                comments: true,
+                blogLikes: true
+            },
+        })
+        console.log("myblogs: ", myBlogs);
+        res.json({ message: "Fetching of myBlogs successful", myBlogs })
+    } catch (error) {
+        console.error("Error getting a blog: ", error)
+    }
+});
+
 //update blog likes  
 router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
     const { blogId } = req.params;
@@ -121,26 +142,6 @@ router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: fa
         console.error("Error updating blog likes: ", error)
     }
 });
-
-//get user's personal blogs
-router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
-    console.log("myblogs called")
-    try {
-        const myBlogs = await prisma.blog.findMany({
-            where: {
-                authorId: (req.user as User).id
-            },
-            include: {
-                profile: true
-            },
-            // distinct: ["id"]
-        })
-        console.log("myblogs: ", myBlogs);
-        res.json({ message: "Fetching of myBlogs successful", myBlogs })
-    } catch (error) {
-        console.error("Error getting a blog: ", error)
-    }
-})
 
 
 //get blog by id

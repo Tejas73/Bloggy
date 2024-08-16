@@ -12,6 +12,7 @@ interface BlogLikes {
     blogliked: boolean,
     userId: string
 }
+
 interface Blogs {
     id: string,
     title: string,
