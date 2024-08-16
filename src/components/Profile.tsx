@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/ui/input";
 
 const Profile = () => {
   const navigate = useNavigate();

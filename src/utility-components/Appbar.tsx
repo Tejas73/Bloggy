@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/ui/button"
 import useAuth from "@/hooks/useAuth"
 import { currUserId, isLoggedIn } from "@/store/atoms/isLoggedIn";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useCookies, CookiesProvider } from "react-cookie";
 import ProfileMenu from "./ProfileMenu";
 import axios from "axios";
-import { LogoBLoggy, Logout, WritePencil } from "@/components/ui/svg-elements";
+import { LogoBLoggy, Logout, WritePencil } from "@/ui/svg-elements";
 
 const Appbar = () => {
     useAuth();

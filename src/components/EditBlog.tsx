@@ -2,13 +2,13 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { useEffect, useState } from 'react';
-import { Button } from "@/components/ui/button"
+import { Button } from "@/ui/button"
 import { useNavigate, useParams } from "react-router-dom";
 import draftToHtml from 'draftjs-to-html';
 import sanitizeHtml from 'sanitize-html';
 import axios from 'axios';
 import ProfileMenu from '@/utility-components/ProfileMenu';
-import { LogoBLoggy } from './ui/svg-elements';
+import { LogoBLoggy } from '../ui/svg-elements';
 
 interface OpenedBlogFields {
     title: string,
@@ -44,7 +44,7 @@ const EditBlog = () => {
         }
 
         getBlog();
-    }, [blogId]);
+    }, [blogId]); 
 
     const showInputTitle = () => {
         setEditTitle(true);
@@ -91,16 +91,18 @@ const EditBlog = () => {
     return (
         <div>
             {/* appbar */}
-            <div className="flex bg-zomp justify-around items-center h-20 border-b-2 border-night sticky">
+            <div
+                className="w-full flex bg-zomp justify-around items-center h-20 border-b-2 border-night sticky">
+                    
                 <div className=" flex justify-between items-center">
                     {/* logo  */}
                     <LogoBLoggy />
-                    <div className="font-title text-4xl mr-40" onClick={handleFeed}>
+                    <div className="font-title text-4xl md:mr-40" onClick={handleFeed}>
                         Bloggy
                     </div>
                 </div>
 
-                <div className="ml-9 flex items-center w-64 ">
+                <div className="ml-9 flex items-center">
                     {/* publish */}
                     {(updatedTitle === "") ? (<Button className="bg-gray-600 hover:bg-gray-600 text-white  rounded-full ">
                         Save & Publish
@@ -142,6 +144,7 @@ const EditBlog = () => {
                             wrapperClassName="demo-wrapper"
                             editorState={updatedEditorState}
                             onEditorStateChange={setUpdatedEditorState}
+                            toolbarClassName='sticky top-0 bg-white z-10'
                             editorClassName="demo-editor bg-white p-2 font-description text-xl"
                             placeholder="Start writing your blog here..."
                         />

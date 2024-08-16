@@ -3,7 +3,7 @@ import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from 'sanitize-html';
-import { BlogLike, CommentBubble, AuthorIcon } from "./ui/svg-elements";
+import { BlogLike, CommentBubble, AuthorIcon } from "../ui/svg-elements";
 import { currUserId } from "@/store/atoms/isLoggedIn";
 import { useRecoilValue } from "recoil";
 
@@ -75,7 +75,7 @@ const Feed = () => {
                 <div className="py-2 hover:cursor-pointer" >
                     <div onClick={blogClick}>
                         {/* title  */}
-                        <div className="text-3xl text-gray-800">{blogs.title}</div>
+                        <div className="text-xl lg:text-3xl text-gray-800">{blogs.title}</div>
 
                         {/* name  */}
                         <div className="flex">

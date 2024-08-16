@@ -1,7 +1,9 @@
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/ui/button';
+// import { SvgSquares } from '../ui/svg-elements';
+import { Button } from '@/ui/button';
 import Appbar from '../utility-components/Appbar';
 import { useNavigate } from 'react-router-dom';
-import { SvgSquares } from './ui/svg-elements';
+import { SvgSquares } from '@/ui/svg-elements';
 
 const Landing = () => {
   const navigate = useNavigate();

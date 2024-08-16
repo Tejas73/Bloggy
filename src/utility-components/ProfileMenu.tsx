@@ -5,8 +5,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MyBlogPad, MyProfilePerson, ProfileLogo } from "@/components/ui/svg-elements";
+} from "@/ui/dropdown-menu"
+import { MyBlogPad, MyProfilePerson, ProfileLogo } from "@/ui/svg-elements";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = () => {

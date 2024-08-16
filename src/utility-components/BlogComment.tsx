@@ -1,15 +1,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/ui/button";
+import { Input } from "@/ui/input";
 import axios from "axios";
 import { useRecoilState, useRecoilValue, } from "recoil";
 import { currCommentState, selectedCommentIdState, selectedCommentState } from "@/store/atoms/commentAtoms";
 import { editCommentState } from "@/store/atoms/commentAtoms";
 import CommentMenu from "./CommentMenu";
 import { currUserId } from "@/store/atoms/isLoggedIn";
-import { CommentBtn, DislikeBtn, LikeBtn } from "@/components/ui/svg-elements";
+import { CommentBtn, DislikeBtn, LikeBtn } from "@/ui/svg-elements";
 
 interface Like {
     liked: boolean;

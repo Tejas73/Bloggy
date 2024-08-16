@@ -49,7 +49,7 @@ const MyBlogs = () => {
             <div className="border p-3" key={blog.id}>
                 <div className="py-2 " onClick={editThisBlog}>
                     {/* title  */}
-                    <div className="text-3xl text-gray-800">{blog.title}</div>
+                    <div className="text-xl lg:text-3xl text-gray-800">{blog.title}</div>
 
                     {/* name  */}
                     <div>{blog.profile.name}</div>
@@ -76,9 +76,9 @@ const MyBlogs = () => {
                 <Appbar></Appbar>
             </div>
             <div>
-                <div className="w-2/4 mx-auto p-4 pt-24">
+                <div className="w-4/5 md:w-3/5 lg:w-3/5 mx-auto pt-16 md:pt-20">
                 {/* <div className="w-2/4 mx-auto p-4 pt-24"> */}
-                    <h1 className="text-3xl">My Blogs</h1>
+                    <div className="text-3xl fixed bg-opacity-100 z-10 bg-white w-full py-2">My Blogs</div>
 
                     {/* line */}
                     <hr className="h-px mt-4 mb-8 bg-gray-300 border-0 dark:bg-gray-700" />

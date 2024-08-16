@@ -1,11 +1,11 @@
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/ui/dropdown-menu';
 import useAuth from '@/hooks/useAuth';
 import { currUserId, isLoggedIn } from '@/store/atoms/isLoggedIn';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currCommentState, editCommentState, selectedCommentIdState, selectedCommentState } from '@/store/atoms/commentAtoms';
-import { DeleteBin, EditPencil, ThreeDotsMenu } from '@/components/ui/svg-elements';
+import { DeleteBin, EditPencil, ThreeDotsMenu } from '@/ui/svg-elements';
 
 // optimze the re-renders caused by the useEffect
 interface CommentMenuProps {
