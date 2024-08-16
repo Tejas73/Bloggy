@@ -3,14 +3,9 @@ import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from 'sanitize-html';
-import { BlogLike, CommentBubble } from "./ui/svg-elements";
+import { BlogLike, CommentBubble, AuthorIcon } from "./ui/svg-elements";
 import { currUserId } from "@/store/atoms/isLoggedIn";
 import { useRecoilValue } from "recoil";
-// import { useRecoilState } from "recoil";
-// import { selectedBlogIdState } from "@/store/atoms/blogAtoms";
-
-//improve UI
-// add like blog button and number of comments for each blog 
 
 interface BlogLikes {
     blogId: string,
@@ -76,13 +71,17 @@ const Feed = () => {
 
         return (
             <div className="border p-3 " key={blogs.id}>
-                <div className="py-2 " >
+
+                <div className="py-2 hover:cursor-pointer" >
                     <div onClick={blogClick}>
                         {/* title  */}
                         <div className="text-3xl text-gray-800">{blogs.title}</div>
 
                         {/* name  */}
-                        <div>{blogs.profile.name}</div>
+                        <div className="flex">
+                            <div className="pr-1 pt-1"><AuthorIcon /></div>
+                            <div> {blogs.profile.name}</div>
+                        </div>
 
                         {/* description  */}
                         <div className="relative h-11 overflow-hidden">
@@ -100,17 +99,12 @@ const Feed = () => {
                     <div className="flex pt-5">
 
                         {/* blog like  */}
-                        <div onClick={() => blogLikeClick(blogs.id)}>
+                        <div className="hover:cursor-pointer" onClick={() => blogLikeClick(blogs.id)}>
                             <BlogLike fillColor={
                                 blogs.blogLikes.some(
-                                    (prop: BlogLikes)=> prop.userId === thisUserId && prop.blogliked
+                                    (prop: BlogLikes) => prop.userId === thisUserId && prop.blogliked
                                 )
                             } />
-                            {/* {blogs.blogLikes.blogLiked ? (
-                                <BlogLike fillColor={true} />
-                            ) : (
-                                <BlogLike fillColor={false} />
-                            )} */}
                         </div>
                         <div>
                             {blogs.blogLike}
@@ -118,10 +112,10 @@ const Feed = () => {
 
 
                         {/* blog comments  */}
-                        <div onClick={blogClick}>
+                        <div className="hover:cursor-pointer pl-3" onClick={blogClick}>
                             <CommentBubble />
                         </div>
-                        <div onClick={blogClick}>
+                        <div className="hover:cursor-pointer" onClick={blogClick}>
                             {blogs.comments.length}
                         </div>
                     </div>

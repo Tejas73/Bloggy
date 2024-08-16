@@ -70,7 +70,7 @@ const CreateBlog = () => {
                 <div className=" flex justify-between items-center">
                     {/* logo  */}
                     <LogoBLoggy />
-                    <div className="font-title text-4xl mr-40" onClick={handleFeed}>
+                    <div className="font-title text-4xl mr-40 hover:cursor-pointer" onClick={handleFeed}>
                         Bloggy
                     </div>
                 </div>

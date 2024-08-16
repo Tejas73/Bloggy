@@ -11,7 +11,7 @@ import { LogoBLoggy, Logout, WritePencil } from "@/components/ui/svg-elements";
 const Appbar = () => {
     useAuth();
     const auth = useRecoilValue(isLoggedIn);
-    
+
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
     const setUserId = useSetRecoilState(currUserId)
@@ -24,7 +24,6 @@ const Appbar = () => {
     const handleLogout = async () => {
         try {
             const response = await axios.put("http://localhost:3000/api/user/logout",);
-            // console.log("response: ", response);
             if (response) {
                 removeCookie('jwt', { path: '/' });
                 setAuth({ isAuthenticated: false });
@@ -48,42 +47,42 @@ const Appbar = () => {
         navigate('/feed')
     }
 
-   
-    // console.log("cookies.jwt from APPBAR: ", cookies.jwt);
     return (
         <CookiesProvider>
-            <div className="flex bg-tgreen justify-between items-center h-20 border-b-2 border-night sticky">
-                <div className="flex justify-between items-center pl-28">
+            <div className="md:h-20 w-screen bg-tgreen flex fixed  justify-between items-center  border-b-2 border-night ">
+                <div className="flex justify-between items-center pl-4 md:pl-28">
 
                     {/* logo  */}
                     <LogoBLoggy />
 
-                    <div className="font-title text-4xl" onClick={handleHome}>
+                    {/* name  */}
+                    <div className="font-title text-4xl hover:cursor-pointer" onClick={handleHome}>
                         Bloggy
                     </div>
                 </div>
 
                 {/* if logged in then */}
-                {auth.isAuthenticated && <div className="flex items-center w-64 ">
+                {auth.isAuthenticated && <div className="flex bg-slate-60 place-content-around w-40 md:w-56 md:mr-14">
 
                     {/* write */}
-                    <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleWrite}>
+                    <button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleWrite}>
                         <WritePencil />
-                    </Button>
+                    </button>
 
                     {/* profile */}
-                    <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night">
+                    <button className="bg-transparent pt-1 hover:bg-tgreen hover:text-slate-400 text-night">
                         <ProfileMenu></ProfileMenu>
-                    </Button>
+                    </button>
 
                     {/* logout */}
-                    <Button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleLogout}>
+                    <button className="bg-transparent hover:bg-tgreen hover:text-slate-400 text-night" onClick={handleLogout}>
                         <Logout />
-                    </Button>
+                    </button>
+
                 </div>}
 
                 {/* if logged out then */}
-                {!auth.isAuthenticated  && <div className="flex justify-around items-center w-64">
+                {!auth.isAuthenticated && <div className="flex justify-around items-center w-52 sm:w-64">
 
                     <Button className="bg-transparent text-night hover:bg-tgreen hover:text-slate-400" onClick={handleSigninClick}>Signin</Button>
 
