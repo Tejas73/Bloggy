@@ -127,14 +127,16 @@ const Feed = () => {
 
     return (
         <div>
-            <Appbar></Appbar>
-            <div >
-                <div className="w-2/4 mx-auto">
+
+            <div>
+                <Appbar></Appbar>
+            </div>
+                <div className="w-4/5 md:w-3/5 lg:w-3/5 mx-auto pt-10 md:pt-20">
                     <div className="">
                         {getMyBLogs}
                     </div>
                 </div>
-            </div>
+                
         </div>
     )
 

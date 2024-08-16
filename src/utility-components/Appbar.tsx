@@ -49,7 +49,7 @@ const Appbar = () => {
 
     return (
         <CookiesProvider>
-            <div className="md:h-20 w-screen bg-tgreen flex fixed  justify-between items-center  border-b-2 border-night ">
+            <div className="md:h-20 w-screen bg-tgreen flex fixed  justify-between items-center  border-b-2 border-night z-10">
                 <div className="flex justify-between items-center pl-4 md:pl-28">
 
                     {/* logo  */}

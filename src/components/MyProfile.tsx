@@ -173,9 +173,11 @@ const MyProfile = () => {
 
     return (
         <div>
-            <Appbar></Appbar>
             <div>
-                <div className="w-2/4 mx-auto p-4">
+                <Appbar></Appbar>
+            </div>
+            <div>
+                <div className="w-2/4 mx-4 md:mx-auto p-4">
 
                     <h1 className="text-3xl">My Profile</h1>
 

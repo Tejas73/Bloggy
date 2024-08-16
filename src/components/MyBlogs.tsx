@@ -72,9 +72,12 @@ const MyBlogs = () => {
 
     return (
         <div>
-            <Appbar></Appbar>
             <div>
-                <div className="w-2/4 mx-auto p-4 ">
+                <Appbar></Appbar>
+            </div>
+            <div>
+                <div className="w-2/4 mx-auto p-4 pt-24">
+                {/* <div className="w-2/4 mx-auto p-4 pt-24"> */}
                     <h1 className="text-3xl">My Blogs</h1>
 
                     {/* line */}
