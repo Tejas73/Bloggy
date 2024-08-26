@@ -1,5 +1,3 @@
-// import { Button } from '@/ui/button';
-// import { SvgSquares } from '../ui/svg-elements';
 import { Button } from '@/ui/button';
 import Appbar from '../utility-components/Appbar';
 import { useNavigate } from 'react-router-dom';

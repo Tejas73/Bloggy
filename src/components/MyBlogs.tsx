@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Appbar from "../utility-components/Appbar";
 import axios from "axios";
 import sanitizeHtml from 'sanitize-html';
-import { useNavigate } from "react-router-dom";
 import { BlogLike, CommentBubble } from "@/ui/svg-elements";
+import BlogMenu from "@/utility-components/BlogMenu";
+import { currBlogState } from "@/store/atoms/blogAtoms";
+import { useRecoilState } from "recoil";
 
-// improve UI
-//add a three dot menu for edit and delete feature of a blog
-// when clicked on the blog, instead of editing EditBlog, Blog should be called
 interface BlogLikes {
     blogId: string,
     blogliked: boolean,
@@ -18,6 +17,7 @@ interface BlogField {
     title: string,
     description: string,
     id: string,
+    authorId: string,
     blogLike: number,
     profile: {
         bio: string,
@@ -29,20 +29,15 @@ interface BlogField {
     blogLikes: Array<BlogLikes>
 }
 
-interface MyBlogsField {
-    myBlogs: Array<BlogField>
-}
-
 const MyBlogs = () => {
-    const [myblogs, setMyblogs] = useState<MyBlogsField | null>(null);
-    const navigate = useNavigate();
+    const [myblogs, setMyblogs] = useRecoilState<BlogField[] | null>(currBlogState);
 
     useEffect(() => {
         const currBlogs = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/blog/myblogs")
-                console.log(response.data);
-                setMyblogs(response.data);
+                console.log("response.data: ", response.data);
+                setMyblogs(response.data.myBlogs);
             } catch (error) {
                 console.error("Error fetching blog data: ", error);
             }
@@ -51,17 +46,20 @@ const MyBlogs = () => {
     }, [])
     console.log("myblogs: ", myblogs);
 
-
-    const getMyBLogs = myblogs?.myBlogs.map((blog) => {
-        const editThisBlog = () => {
-            navigate(`/myblog/${blog.id}`)
-        }
+    const getMyBLogs = myblogs?.map((blog) => {
 
         return (
             <div className="border p-3" key={blog.id}>
-                <div className="py-2 " onClick={editThisBlog}>
+                <div className="py-2 ">
                     {/* title  */}
-                    <div className="text-xl lg:text-3xl text-gray-800">{blog.title}</div>
+                    <div className="flex justify-between">
+                        <div className="text-xl lg:text-3xl text-gray-800">
+                            {blog.title}
+                        </div>
+                        <div>
+                            <BlogMenu id={blog.id} userId={blog.authorId} />
+                        </div>
+                    </div>
 
                     {/* name  */}
                     <div>{blog.profile.name}</div>
@@ -97,11 +95,11 @@ const MyBlogs = () => {
                             {blog.comments.length}
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         )
-    })
+    });
 
     return (
         <div>
@@ -110,7 +108,7 @@ const MyBlogs = () => {
             </div>
             <div>
                 <div className="w-4/5 md:w-3/5 lg:w-3/5 mx-auto pt-16 md:pt-20">
-                {/* <div className="w-2/4 mx-auto p-4 pt-24"> */}
+                    {/* <div className="w-2/4 mx-auto p-4 pt-24"> */}
                     <div className="text-3xl fixed bg-opacity-100 z-10 bg-white w-full py-2">My Blogs</div>
 
                     {/* line */}
@@ -123,7 +121,7 @@ const MyBlogs = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default MyBlogs;

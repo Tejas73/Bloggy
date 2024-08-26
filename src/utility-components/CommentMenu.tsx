@@ -10,7 +10,7 @@ import { DeleteBin, EditPencil, ThreeDotsMenu } from '@/ui/svg-elements';
 // optimze the re-renders caused by the useEffect
 interface CommentMenuProps {
     userId: string;
-    id: string;
+    id: string; 
     comment:string;
 }
 
@@ -21,9 +21,10 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
 }) => {
     useAuth();
 
-    const authState = useRecoilValue(isLoggedIn);
     const setSelectedCommentId = useSetRecoilState(selectedCommentIdState);
     const [comments, setComments] = useRecoilState(currCommentState); // currCommentState holds all the current blog comments
+    
+    const authState = useRecoilValue(isLoggedIn);
     const setIsEditComment = useSetRecoilState(editCommentState) // used for editing a comment based on boolean value of editCommentState
     const setSelectedComment = useSetRecoilState(selectedCommentState);
     const authUserId = useRecoilValue(currUserId);
@@ -38,7 +39,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     };
 
     const handleDeleteComment = async () => {
-        try {
+        try { 
             await axios.delete(
                 `http://localhost:3000/api/comment/deletecomment/?userId=${userId}&id=${id}`
             );

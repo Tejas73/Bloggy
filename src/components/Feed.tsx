@@ -68,7 +68,7 @@ const Feed = () => {
             } catch (error) {
                 console.error("Error liking a blog: ", error);
             }
-        }
+        } 
 
         return (
             <div className="border p-3 " key={blogs.id}>

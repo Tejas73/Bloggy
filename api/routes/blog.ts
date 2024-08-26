@@ -17,14 +17,13 @@ router.post("/createblog", passport.authenticate("jwt", { session: false }), asy
         const { title, description } = req.body;
         const sanitizedDescription = sanitizeHtml(description);
         const userId = (req.user as User).id;
-        let blogId;
 
         const userProfile = await prisma.profile.findUnique({
             where: { userId }
         })
 
         if (!userProfile) {
-            return res.json({ message: "User profile not found for userId: ${userId}" })
+            return res.json({ message: "User profile not found for userId: ${userId}" });
         }
         console.log("userProfile: ", userProfile);
         console.log("userProfile.name: ", userProfile.name);
@@ -35,8 +34,8 @@ router.post("/createblog", passport.authenticate("jwt", { session: false }), asy
                 description: sanitizedDescription,
                 author: { connect: { id: userProfile.userId } },
                 profile: { connect: { id: userProfile.id } },
-                blogLikes:{
-                    create:{
+                blogLikes: {
+                    create: {
                         blogliked: false,
                         userId,
                     }
@@ -45,7 +44,8 @@ router.post("/createblog", passport.authenticate("jwt", { session: false }), asy
         })
 
         console.log("newBlog: ", newBlog);
-        res.json({ message: "Blog created successfully", newBlog })
+        res.json({ message: "Blog created successfully", newBlog });
+
     } catch (error) {
         console.error("Error creating a blog: ", error)
     }
@@ -61,7 +61,9 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
                 blogLikes: true
             },
         });
-        res.json({ message: "Fetching of all Blogs successful", showBlogs })
+
+        res.json({ message: "Fetching of all Blogs successful", showBlogs });
+
     } catch (error) {
         console.error("Error getting all blogs: ", error)
     }
@@ -69,7 +71,8 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
 
 //get user's personal blogs
 router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
-    console.log("myblogs called")
+    console.log("myblogs called");
+
     try {
         const myBlogs = await prisma.blog.findMany({
             where: {
@@ -80,9 +83,11 @@ router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (
                 comments: true,
                 blogLikes: true
             },
-        })
+        });
+
         console.log("myblogs: ", myBlogs);
-        res.json({ message: "Fetching of myBlogs successful", myBlogs })
+        res.json({ message: "Fetching of myBlogs successful", myBlogs });
+
     } catch (error) {
         console.error("Error getting a blog: ", error)
     }
@@ -96,6 +101,7 @@ router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: fa
     if (!blogId) {
         return res.status(400).json({ message: "Missing blog ID" });
     }
+
     try {
         const existingBlogLike = await prisma.blogLike.findUnique({
             where: { userId_blogId: { userId, blogId } }
@@ -104,21 +110,22 @@ router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: fa
         if (existingBlogLike) {
             const blogLiked = !existingBlogLike.blogliked;
 
-        const updatedBlogLike = await prisma.blogLike.update({
-            where: { userId_blogId: { userId, blogId } },
-            data: { blogliked: blogLiked }
-        });
+            const updatedBlogLike = await prisma.blogLike.update({
+                where: { userId_blogId: { userId, blogId } },
+                data: { blogliked: blogLiked }
+            });
 
 
             const likeChange = blogLiked ? 1 : -1;
 
-        await prisma.blog.update({
-            where: { id: blogId },
-            data: { blogLike: {increment: likeChange} }
-        })
+            await prisma.blog.update({
+                where: { id: blogId },
+                data: { blogLike: { increment: likeChange } }
+            })
 
-        return res.json({ message: 'Blog like updated successfully', updatedBlogLike });
+            return res.json({ message: 'Blog like updated successfully', updatedBlogLike });
         }
+
         else {
             const newBlogLike = await prisma.blogLike.create({
                 data: {
@@ -138,6 +145,7 @@ router.put("/updatebloglike/:blogId", passport.authenticate("jwt", { session: fa
             return res.json({ message: 'Blog like added successfully', newBlogLike });
 
         }
+
     } catch (error) {
         console.error("Error updating blog likes: ", error)
     }
@@ -149,17 +157,21 @@ router.get("/feed/:blogId", passport.authenticate("jwt", { session: false }), as
     try {
         const { blogId } = req.params;
         console.log(blogId);
+
         const singleBlog = await prisma.blog.findUnique({
             where: { id: blogId }
-        })
+        });
+
         console.log("reached in feed/blogId");
+
         if (singleBlog) {
-            res.json({ message: "Fetching of a Blog successful", singleBlog })
+            res.json({ message: "Fetching of a Blog successful", singleBlog });
         } else {
-            res.status(404).json({ message: 'Blog not found' })
+            res.status(404).json({ message: 'Blog not found' });
         }
+
     } catch (error) {
-        console.error("Error getting a blog: ", error)
+        console.error("Error getting a blog: ", error);
     }
 })
 
@@ -168,8 +180,9 @@ router.get("/feed/:blogId", passport.authenticate("jwt", { session: false }), as
 router.put("/updatemyblog/:blogId", passport.authenticate("jwt", { session: false }), async (req: express.Request, res: express.Response) => {
     try {
         const { blogId } = req.params;
-        const { title, description } = req.body
+        const { title, description } = req.body;
         const sanitizedDescription = sanitizeHtml(description);
+
         const updatedBlog = await prisma.blog.update({
             where: {
                 id: blogId
@@ -178,28 +191,51 @@ router.put("/updatemyblog/:blogId", passport.authenticate("jwt", { session: fals
                 title: title,
                 description: sanitizedDescription,
             }
-        })
+        });
 
-        res.json({ message: "Blog updated successfully", updatedBlog })
+        res.json({ message: "Blog updated successfully", updatedBlog });
+
     } catch (error) {
-        console.error("Error updating my blogs ", error)
+        console.error("Error updating my blogs ", error);
     }
 })
 
-//delete blog
+//delete blog, this is incomplete because to delete a blog, the order of deleting is: comment-likes -> comments -> bloglike -> blog
 router.delete("/deleteblog/:id", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ id: string }, {}, {}>, res: express.Response) => {
     try {
-        const blogId = req.params.id
+        const blogId = req.params.id;
+
+        await prisma.commentLike.deleteMany({
+            where: {
+                comment:{
+                    blogId:blogId
+                }
+            }
+        });
+
+        await prisma.comment.deleteMany({
+            where: {
+                blogId: blogId
+            }
+        });
+
+        await prisma.blogLike.deleteMany({
+            where: {
+                blogId: blogId
+            }
+        });
+
         const deleteMyBlog = await prisma.blog.delete({
             where: {
                 id: blogId
             }
-        })
-        res.json({ message: "Blog deleted successfully", deleteMyBlog })
+        });
+
+        res.json({ message: "Blog deleted successfully", deleteMyBlog });
 
     } catch (error) {
         console.error("Error deleting my blog ", error)
     }
 })
 
-export default router
+export default router;

@@ -18,10 +18,10 @@ const Signup = () => {
         email,
         password
       }, {
-        withCredentials: true // Include credentials (cookies) in the request
-    });
-      const token = response.data.token; 
-      console.log("token",token)
+        withCredentials: true
+      });
+      const token = response.data.token;
+      console.log("token", token)
       if (token) {
         setCookies("jwt", token, { path: "/" });
         console.log("Signup successful: ", token);
@@ -80,7 +80,7 @@ const Signup = () => {
               Sign Up
             </Button>
           </div>
-          
+
         </form>
       </div>
     </div>

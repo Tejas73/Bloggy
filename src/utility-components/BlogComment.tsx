@@ -30,18 +30,19 @@ interface Comment {
 interface BlogCommentsResponse {
     blogComments: Comment[];
 }
+
 const BlogComment = () => {
     const { blogId } = useParams<{ blogId: string }>();
     const [comment, setComment] = useState(""); // to create a comment
-    const [currBlogComments, setCurrBlogComments] = useRecoilState(currCommentState); // to fetch the comments from the server
     const [selectedCommentId, setSelectedCommentId] = useRecoilState(selectedCommentIdState); // used to provide the id for the intended comment
+    const [currBlogComments, setCurrBlogComments] = useRecoilState(currCommentState); // to fetch the comments from the server
     const [isEditing, setIsEditing] = useRecoilState(editCommentState); // used for editing a comment based on boolean value of editCommentState
     const [editedComment, setEditedComment] = useState(''); //used to store the text during editing before sending it to the BE
     const selectedComment = useRecoilValue(selectedCommentState);
     const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
     console.log("authUserId: ", authUserId);
-    console.log("thisUserId: ", thisUserId);
+    console.log("thisUserId: ", thisUserId); 
 
     const getComments = async () => {
         try {
@@ -91,6 +92,7 @@ const BlogComment = () => {
             setCurrBlogComments(updatedComments);
             setEditedComment("");
             handleCancelEditComment();
+            
         } catch (error) {
             console.error('Error editing comment: ', error);
         }
@@ -171,7 +173,7 @@ const BlogComment = () => {
                                     (prop: Like) => prop.userId === thisUserId && prop.liked
                                 )}
                             />                            
-                        </div>
+                        </div> 
                         <span>{comment.commentLikes}</span>
 
                         {/* dislike  */}
@@ -188,6 +190,7 @@ const BlogComment = () => {
                 </div>
             )}
 
+            {/* comment menu  */}
             <div className="w-6 h-fit" >
                 {isEditing && selectedCommentId === comment.id && comment.userId === thisUserId ?
                     (<></>) : (

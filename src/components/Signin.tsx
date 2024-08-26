@@ -12,7 +12,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
-  const setAuthState =  useSetRecoilState(currUserId)
+  const setAuthState = useSetRecoilState(currUserId)
 
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -22,26 +22,21 @@ const Signin = () => {
         email,
         password
       });
-      
-      const {token, user} = response.data; 
-      // console.log("user: ", user);
+
+      const { token, user } = response.data;
 
       if (token) {
         setCookie("jwt", token, { path: "/" });
-        
-        // console.log("SIGNIN userid: ", user.id)
-        // console.log("email: ", user.email)
-        setAuthState({userID: user.id})
-        // console.log("authState", authState)
+        setAuthState({ userID: user.id })
         navigate("/feed");
       }
 
-       else {
+      else {
         console.error("Signin failed: token not set");
       }
 
-    } 
-    
+    }
+
     catch (error) {
       console.error("Error during Signin: ", error);
     }
@@ -91,7 +86,7 @@ const Signin = () => {
             </Button>
           </div>
         </form>
-        
+
       </div>
     </div>
   );

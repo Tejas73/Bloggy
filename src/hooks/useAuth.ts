@@ -18,12 +18,10 @@ const useAuth = async () => {
                     withCredentials: true
                 })
                 const { token, userId } = response.data;
-                console.log("token refreshed: ", token);
-                console.log("userId refreshed: ", userId);
 
                 if (token) {
                     setAuth({ isAuthenticated: true });
-                    setAuthState({userID: userId})
+                    setAuthState({ userID: userId })
                 } else {
                     setAuth({ isAuthenticated: false });
                 }
@@ -36,8 +34,6 @@ const useAuth = async () => {
                     const response = await axios.get('http://localhost:3000/api/user/check', {
                         withCredentials: true
                     })
-                    const { token } = response.data;
-                    console.log("token: ", token);
 
                     if (response.status === 200) {
                         setAuth({ isAuthenticated: true });

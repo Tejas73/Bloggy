@@ -16,7 +16,7 @@ const Blog = () => {
     useEffect(() => {
         const getBlog = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/blog/feed/${blogId}`)
+                const response = await axios.get(`http://localhost:3000/api/blog/feed/${blogId}`);
                 setOpenedBlog(response.data.singleBlog);
             } catch (error) {
                 console.error("Error fetching blog data: ", error);

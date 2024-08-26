@@ -288,7 +288,7 @@ router.delete("/deletecomment", passport.authenticate("jwt", { session: false })
         if (existingComment?.userId === userId) {
 
             await prisma.commentLike.deleteMany({
-                where: { commentId: id }
+                where: { commentId: id } 
             })
 
             const deleteComment = await prisma.comment.delete({

@@ -19,8 +19,8 @@ app.use(bodyParser.json());
 // Middleware to parse cookies
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173", 
-    credentials: true 
+    origin: "http://localhost:5173",
+    credentials: true
 }));
 
 // Initialize Passport
@@ -34,9 +34,8 @@ async function checkDatabaseConnection() {
         console.error("Error connecting to database:", error);
         process.exit(1); // Exit the application if connection fails
     }
-}   
+}
 
-// Define your routes here...
 app.use('/api/user', userRoute)
 app.use('/api/blog', blogRoute)
 app.use('/api/comment', commentRoute);
