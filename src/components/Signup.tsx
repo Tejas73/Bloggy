@@ -10,11 +10,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookies] = useCookies(["jwt"]);
-
+  const origin = import.meta.env.VITE_ORIGIN;
+  
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/user/signup", {
+      const response = await axios.post(`${origin}/api/user/signup`, {
         email,
         password
       }, {

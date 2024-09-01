@@ -15,7 +15,7 @@ const CreateBlog = () => {
     const navigate = useNavigate();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const [title, setTitle] = useState("");
-
+    const origin = import.meta.env.VITE_ORIGIN;
     const handleFeed = (): void => {
         navigate("/feed");
     };
@@ -29,7 +29,7 @@ const CreateBlog = () => {
         console.log("sanitizedHtml: ", sanitizedHtml);
 
         try {
-            const response = await axios.post("http://localhost:3000/api/blog/createblog", {
+            const response = await axios.post(`${origin}/api/blog/createblog`, {
                 title: title,
                 description: sanitizedHtml
             });

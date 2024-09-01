@@ -31,11 +31,12 @@ interface BlogField {
 
 const MyBlogs = () => {
     const [myblogs, setMyblogs] = useRecoilState<BlogField[] | null>(currBlogState);
-
+    const origin = import.meta.env.VITE_ORIGIN;
+    
     useEffect(() => {
         const currBlogs = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/blog/myblogs")
+                const response = await axios.get(`${origin}/api/blog/myblogs`)
                 console.log("response.data: ", response.data);
                 setMyblogs(response.data.myBlogs);
             } catch (error) {

@@ -239,13 +239,13 @@ router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: exp
 
     const payload = { userId: user.id }
     const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
-    console.log("token from signup ", token); // this works
+    // console.log("token from signup ", token);
 
     if (!process.env.JWT_SECRET) {
         return res.json({ message: "Error: JWT_SECRET is empty or not set" })
     }
 
-    res.cookie("jwt", token, { httpOnly: true, secure: false }) //set secure:true for PRODUCTION    
+    res.cookie("jwt", token, { httpOnly: true, secure: true }) 
     res.json({ message: 'Login successful', token, user })
 })
 

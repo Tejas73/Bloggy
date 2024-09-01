@@ -23,11 +23,12 @@ const EditBlog = () => {
     const [editTitle, setEditTitle] = useState(false);
     const [updatedEditorState, setUpdatedEditorState] = useState(() => EditorState.createEmpty());
     const [editEditorState, setEditEditorState] = useState(false);
-
+    const origin = import.meta.env.VITE_ORIGIN;
+    
     useEffect(() => {
         const getBlog = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/blog/feed/${blogId}`)
+                const response = await axios.get(`${origin}/api/blog/feed/${blogId}`)
                 const blog = response.data.singleBlog;
                 setOpenedBlog(blog);
                 setUpdatedTitle(blog.title);
@@ -64,7 +65,7 @@ const EditBlog = () => {
         const sanitizedHtml = sanitizeHtml(contentHtml);
 
         try {
-            const response = await axios.put(`http://localhost:3000/api/blog/updatemyblog/${blogId}`, {
+            const response = await axios.put(`${origin}/api/blog/updatemyblog/${blogId}`, {
                 title: updatedTitle,
                 description: sanitizedHtml
             });

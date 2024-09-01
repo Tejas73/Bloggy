@@ -37,10 +37,11 @@ const Feed = () => {
     const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
     const navigate = useNavigate();
-
+    const origin = import.meta.env.VITE_ORIGIN;
+    
     const currBlogs = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/api/blog/allblogs")
+            const response = await axios.get(`${origin}/api/blog/allblogs`)
             console.log("response.data: ", response.data);
             setFeed(response.data);
         } catch (error) {
@@ -61,7 +62,7 @@ const Feed = () => {
 
         const blogLikeClick = async (blogId: string) => {
             try {
-                const response = await axios.put(`http://localhost:3000/api/blog/updatebloglike/${blogId}`);
+                const response = await axios.put(`${origin}/api/blog/updatebloglike/${blogId}`);
                 console.log("response.data FEED: ", response.data);
                 currBlogs();
 

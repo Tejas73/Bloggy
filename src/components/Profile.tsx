@@ -8,10 +8,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
-
+  const origin = import.meta.env.VITE_ORIGIN;
+  
   const handleProfile = async () => {
     try {
-      const response = await axios.put("/api/user/profile", {
+      const response = await axios.put(`${origin}/api/user/profile`, {
         name,
         bio
       }, {

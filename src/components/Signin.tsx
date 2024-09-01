@@ -12,13 +12,16 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["jwt"]);
-  const setAuthState = useSetRecoilState(currUserId)
-
+  const setAuthState = useSetRecoilState(currUserId);
+  
+  const origin = import.meta.env.VITE_ORIGIN;
+  console.log("Origin:", origin); //Origin: undefined
+  
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/user/signin", {
+      const response = await axios.post(`${origin}/api/user/signin`, {
         email,
         password
       });

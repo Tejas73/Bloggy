@@ -31,11 +31,13 @@ const MyProfile = () => {
     const [updatedBio, setUpdatedBio] = useState("");// Holds the updated bio value during editing    
     const [editBio, setEditBio] = useState(false);// Boolean state to control whether the bio input field is visible for editing
 
+    const origin = import.meta.env.VITE_ORIGIN;
+    
     // Fetch user profile data when the component mounts or when fetchProfileData changes
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/user/myprofile");
+                const response = await axios.get(`${origin}/api/user/myprofile`);
                 setUserData(response.data);
             } catch (error) {
                 console.error("Error fetching profile data: ", error);
