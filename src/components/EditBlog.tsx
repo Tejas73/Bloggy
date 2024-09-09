@@ -137,7 +137,7 @@ const EditBlog = () => {
                     }
 
                     {/* description */}
-                    {!editEditorState && <div className="mb-4 font-description p-3" onClick={showInputDescription} dangerouslySetInnerHTML={{ __html: openedBlog?.description }}></div>}
+                    {!editEditorState && <div className="mb-4 font-description p-3" onClick={showInputDescription} dangerouslySetInnerHTML={{ __html: openedBlog?.description || '' }}></div>}
 
                     {editEditorState &&
                         <Editor

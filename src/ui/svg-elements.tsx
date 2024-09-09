@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 
 export const SvgSquares = () => {
-    const initialColors = Array.from({ length: 10 * 10 }, () => 'black');
+    const initialColors: string[] = Array.from({ length: 10 * 10 }, () => 'black');
     const [colors, setColors] = useState(initialColors);
 
     useEffect(() => {
         const changeColor = () => {
-            const newColors = [...initialColors];
-            const randomIndices = new Set();
+            const newColors: string[] = [...initialColors];
+            const randomIndices = new Set<number>();
 
             while (randomIndices.size < 17) {
                 const randomIndex = Math.floor(Math.random() * newColors.length);
                 randomIndices.add(randomIndex);
             }
 
-            randomIndices.forEach(index => {
+            randomIndices.forEach(index=> {
                 newColors[index] = 'white';
             });
 
