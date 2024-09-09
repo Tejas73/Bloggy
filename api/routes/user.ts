@@ -1,4 +1,3 @@
-// set secure:true for PRODUCTION in signin route
 import express from 'express';
 import prisma from '../utils/prismaClient';
 import bcrypt from 'bcryptjs';
@@ -265,7 +264,7 @@ router.get("/check", passport.authenticate('jwt', { session: false }), async (re
     const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
     console.log("token from check route: ", token);
 
-    res.cookie("jwt", token, { httpOnly: true, secure: false }) //set secure:true for PRODUCTION    
+    res.cookie("jwt", token, { httpOnly: true, secure: true }) 
     res.status(200).json({ message: 'Authenticated', token, userId });
 });
 

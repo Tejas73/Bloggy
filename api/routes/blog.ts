@@ -200,7 +200,7 @@ router.put("/updatemyblog/:blogId", passport.authenticate("jwt", { session: fals
     }
 })
 
-//delete blog, this is incomplete because to delete a blog, the order of deleting is: comment-likes -> comments -> bloglike -> blog
+//delete blog
 router.delete("/deleteblog/:id", passport.authenticate("jwt", { session: false }), async (req: express.Request<{ id: string }, {}, {}>, res: express.Response) => {
     try {
         const blogId = req.params.id;
