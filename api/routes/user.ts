@@ -259,7 +259,6 @@ router.put("/logout", passport.authenticate('jwt', { session: false }), (req, re
 router.get("/check", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const userId = (req.user as User).id;
     const payload = { userId: userId }
-    // console.log("payload from check route: ", payload);
 
     const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
     console.log("token from check route: ", token);
