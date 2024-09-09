@@ -43,8 +43,8 @@ app.use('/api/comment', commentRoute);
 (async () => {
     await checkDatabaseConnection();
 
-    const ORIGIN = process.env.ORIGIN;
-    app.listen(ORIGIN, () => {
-        console.log(`Server is running on port ${ORIGIN}`);
+    const PORT = process.env.PORT || 3000; 
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
 })();
