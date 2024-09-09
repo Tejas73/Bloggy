@@ -15,7 +15,7 @@ const Appbar = () => {
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
     const setUserId = useSetRecoilState(currUserId)
-    const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+    const [ _, removeCookie] = useCookies(['jwt']);
 
     const handleSignupClick = (): void => {
         navigate("/signup");

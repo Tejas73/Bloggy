@@ -8,7 +8,7 @@ import axios from "axios";
 
 const useAuth = async () => {
     const [auth, setAuth] = useRecoilState(isLoggedIn);
-    const [cookie, setCookie] = useCookies(['jwt']);
+    const [cookie] = useCookies(['jwt']);
     const setAuthState = useSetRecoilState(currUserId);
 
     useEffect(() => {
