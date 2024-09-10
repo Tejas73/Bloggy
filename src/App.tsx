@@ -11,7 +11,9 @@ import MyBlogs from "./components/MyBlogs";
 import Blog from "./components/Blog";
 import EditBlog from "./components/EditBlog";
 
-axios.defaults.baseURL = "http://localhost:3000";  // change this to match the new url for production
+const origin = import.meta.env.VITE_ORIGIN;
+
+axios.defaults.baseURL = origin;  // change this to match the new url for production
 axios.defaults.withCredentials = true;
 
 export default function App() {
