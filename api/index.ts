@@ -40,10 +40,12 @@ app.use('/api/user', userRoute)
 app.use('/api/blog', blogRoute)
 app.use('/api/comment', commentRoute);
 
-(async () => {
-    await checkDatabaseConnection();
+console.log(process.env.ORIGIN);
 
+(async () => {
+    
     const PORT = process.env.PORT || 3000; 
+    await checkDatabaseConnection();
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
