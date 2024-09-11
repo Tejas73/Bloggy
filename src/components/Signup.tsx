@@ -18,8 +18,6 @@ const Signup = () => {
       const response = await axios.post(`${origin}/api/user/signup`, {
         email,
         password
-      }, {
-        withCredentials: true
       });
       const token = response.data.token;
       console.log("token", token)

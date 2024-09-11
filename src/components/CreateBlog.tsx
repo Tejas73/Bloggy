@@ -57,8 +57,8 @@ const CreateBlog = () => {
         },
         list: { inDropdown: false },
         textAlign: { inDropdown: false },
-        // image: { inDropdown: false },
         history: { inDropdown: false },
+        // image: { inDropdown: false },
     };
 
     return (

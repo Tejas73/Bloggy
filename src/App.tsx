@@ -13,7 +13,7 @@ import EditBlog from "./components/EditBlog";
 
 const origin = import.meta.env.VITE_ORIGIN;
 
-axios.defaults.baseURL = origin;  // change this to match the new url for production
+axios.defaults.baseURL = origin; 
 axios.defaults.withCredentials = true;
 
 export default function App() {

@@ -64,8 +64,6 @@ const MyProfile = () => {
         try {
             const response = await axios.put("/api/user/updateemail", {
                 updatedEmail,
-            }, {
-                withCredentials: true // Include credentials (cookies) in the request
             });
 
             if (response.status === 200) {

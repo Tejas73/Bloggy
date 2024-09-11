@@ -22,6 +22,7 @@ app.use(cors({
     origin: process.env.ORIGIN,
     credentials: true
 }));
+app.options('*', cors())
 
 // Initialize Passport
 app.use(passport.initialize());
