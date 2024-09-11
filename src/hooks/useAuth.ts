@@ -10,12 +10,13 @@ const useAuth = async () => {
     const [auth, setAuth] = useRecoilState(isLoggedIn);
     const [cookie] = useCookies(['jwt']);
     const setAuthState = useSetRecoilState(currUserId);
+    const origin = import.meta.env.VITE_ORIGIN;
 
     useEffect(() => {
         const checkAuth = async () => {
             if (!cookie.jwt) {
-                const response = await axios.get('http://localhost:3000/api/user/check', {
-                    withCredentials: true
+                const response = await axios.get(`${origin}/api/user/check`, {
+                    withCredentials: true 
                 })
                 const { token, userId } = response.data;
 

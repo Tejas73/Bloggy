@@ -11,6 +11,7 @@ import { LogoBLoggy, Logout, WritePencil } from "@/ui/svg-elements";
 const Appbar = () => {
     useAuth();
     const auth = useRecoilValue(isLoggedIn);
+    const origin = import.meta.env.VITE_ORIGIN;
 
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);
@@ -23,7 +24,7 @@ const Appbar = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.put("http://localhost:3000/api/user/logout",);
+            const response = await axios.put(`${origin}/api/user/logout`);
             if (response) {
                 removeCookie('jwt', { path: '/' });
                 setAuth({ isAuthenticated: false });

@@ -20,6 +20,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     comment
 }) => {
     useAuth();
+    const origin = import.meta.env.VITE_ORIGIN;
 
     const setSelectedCommentId = useSetRecoilState(selectedCommentIdState);
     const [comments, setComments] = useRecoilState(currCommentState); // currCommentState holds all the current blog comments
@@ -41,7 +42,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     const handleDeleteComment = async () => {
         try { 
             await axios.delete(
-                `http://localhost:3000/api/comment/deletecomment/?userId=${userId}&id=${id}`
+                `${origin}/api/comment/deletecomment/?userId=${userId}&id=${id}`
             );
             const updatedComments = comments.filter(comment => comment.id !== id);
             setComments(updatedComments);

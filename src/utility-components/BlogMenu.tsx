@@ -38,6 +38,7 @@ interface BlogField {
 
 const BlogMenu: React.FC<BlogMenuProps> = ({ id, userId }) => {
     useAuth();
+    const origin = import.meta.env.VITE_ORIGIN;
 
     const navigate = useNavigate();
     const [myblogs, setMyblogs] = useRecoilState<BlogField[] | null>(currBlogState);
@@ -52,7 +53,7 @@ const BlogMenu: React.FC<BlogMenuProps> = ({ id, userId }) => {
     const handleDeleteThisBlog = async () => {
         try {
             await axios.delete(
-                `http://localhost:3000/api/blog/deleteblog/${id}`
+                `${origin}/api/blog/deleteblog/${id}`
             );
             if (myblogs) { 
                 const updatedBlogs = myblogs.filter(blogs => blogs.id !== id);

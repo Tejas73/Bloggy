@@ -41,12 +41,14 @@ const BlogComment = () => {
     const selectedComment = useRecoilValue(selectedCommentState);
     const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
+    const origin = import.meta.env.VITE_ORIGIN;
+
     console.log("authUserId: ", authUserId);
     console.log("thisUserId: ", thisUserId); 
 
     const getComments = async () => {
         try {
-            const response = await axios.get<BlogCommentsResponse>(`http://localhost:3000/api/comment/showcomments/${blogId}`);
+            const response = await axios.get<BlogCommentsResponse>(`${origin}/api/comment/showcomments/${blogId}`);
             setCurrBlogComments(response.data.blogComments);
         } catch (error) {
             console.error("Error fetching comments: ", error);
@@ -65,7 +67,7 @@ const BlogComment = () => {
 
     const handleCreateComment = async () => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/comment/createComment/${blogId}`, {
+            const response = await axios.post(`${origin}/api/comment/createComment/${blogId}`, {
                 comment
             });
             if (response.status === 200) {
@@ -80,7 +82,7 @@ const BlogComment = () => {
     const handleEditComment = async (id: string) => {
         try {
             await axios.put(
-                `http://localhost:3000/api/comment/editcomment/?id=${currBlogComments[0].id}&userId=${currBlogComments[0].userId}`,
+                `${origin}/api/comment/editcomment/?id=${currBlogComments[0].id}&userId=${currBlogComments[0].userId}`,
                 {
                     comment: editedComment,
                 }
@@ -108,7 +110,7 @@ const BlogComment = () => {
     const handleLikeButton = async (commentId: string) => {
 
         try {
-            await axios.put(`http://localhost:3000/api/comment/updatecommentlike/${commentId}`);
+            await axios.put(`${origin}/api/comment/updatecommentlike/${commentId}`);
             getComments();
         } catch (error) {
             console.error("Error updating like: ", error);
@@ -118,7 +120,7 @@ const BlogComment = () => {
     const handleDislikeButton = async (commentId: string) => {
 
         try {
-            await axios.put(`http://localhost:3000/api/comment/updatecommentdislike/${commentId}`);
+            await axios.put(`${origin}/api/comment/updatecommentdislike/${commentId}`);
             getComments();
         } catch (error) {
             console.error("Error updating dislike: ", error);
