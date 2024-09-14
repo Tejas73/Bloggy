@@ -32,7 +32,7 @@ const useAuth = async () => {
             if (cookie.jwt) {
                 try {
 
-                    const response = await axios.get('http://localhost:3000/api/user/check', {
+                    const response = await axios.get(`${origin}/api/user/check`, {
                         withCredentials: true
                     })
 
