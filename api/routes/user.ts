@@ -244,7 +244,7 @@ router.post("/signin", async (req: express.Request<{}, {}, UserFields>, res: exp
         return res.json({ message: "Error: JWT_SECRET is empty or not set" })
     }
 
-    res.cookie("jwt", token, { httpOnly: true, secure: true }) 
+    res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: 'none' }) 
     res.json({ message: 'Login successful', token, user })
 })
 
