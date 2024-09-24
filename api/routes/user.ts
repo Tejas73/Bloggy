@@ -263,7 +263,7 @@ router.get("/check", passport.authenticate('jwt', { session: false }), async (re
     const token = jwt.sign(payload, process.env.JWT_SECRET ? process.env.JWT_SECRET : "", { expiresIn: "1h" })
     console.log("token from check route: ", token);
 
-    res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite:'none' }) 
+    res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: "none" });
     res.status(200).json({ message: 'Authenticated', token, userId });
 });
 
