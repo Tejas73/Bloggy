@@ -45,7 +45,7 @@ const useAuth = async () => {
             }
         };
         checkAuth();
-    }, [cookie])
+    }, [cookie, origin, setAuth, setAuthState])
 
     return auth;
 }
