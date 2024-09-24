@@ -23,7 +23,7 @@ const Signin = () => {
     try {
       const response = await axios.post(`${origin}/api/user/signin`, {
         email,
-        password
+        password,
       });
 
       const { token, user } = response.data;
@@ -88,7 +88,7 @@ const Signin = () => {
               Signin
             </Button>
           </div>
-        </form>
+        </form> 
 
       </div>
     </div>

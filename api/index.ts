@@ -14,7 +14,7 @@ import prisma from './utils/prismaClient';
 passport.use(jwtStrategy);
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 
 // Middleware to parse cookies
 app.use(cookieParser());
