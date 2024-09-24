@@ -10,12 +10,12 @@ import axios from 'axios';
 import { LogoBLoggy } from '../ui/svg-elements';
 import ProfileMenu from '@/utility-components/ProfileMenu';
 
+const origin = import.meta.env.VITE_ORIGIN;
 
 const CreateBlog = () => {
     const navigate = useNavigate();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const [title, setTitle] = useState("");
-    const origin = import.meta.env.VITE_ORIGIN;
     const handleFeed = (): void => {
         navigate("/feed");
     };

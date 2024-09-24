@@ -15,6 +15,8 @@ interface OpenedBlogFields {
     description: string
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const EditBlog = () => {
     const navigate = useNavigate();
     const { blogId } = useParams();
@@ -23,7 +25,6 @@ const EditBlog = () => {
     const [editTitle, setEditTitle] = useState(false);
     const [updatedEditorState, setUpdatedEditorState] = useState(() => EditorState.createEmpty());
     const [editEditorState, setEditEditorState] = useState(false);
-    const origin = import.meta.env.VITE_ORIGIN;
     
     useEffect(() => {
         const getBlog = async () => {

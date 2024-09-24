@@ -58,7 +58,7 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
             include: {
                 profile: true,
                 comments: true,
-                blogLikes: true
+                blogLikes: true 
             },
         });
 

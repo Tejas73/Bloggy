@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/ui/input";
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Profile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
-  const origin = import.meta.env.VITE_ORIGIN;
   
   const handleProfile = async () => {
     try {

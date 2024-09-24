@@ -11,7 +11,7 @@ const useAuth = async () => {
     const [cookie] = useCookies(['jwt']);
     const setAuthState = useSetRecoilState(currUserId);
     const origin = import.meta.env.VITE_ORIGIN;
-
+ 
     useEffect(() => {
         const checkAuth = async () => {
             if (!cookie.jwt) {

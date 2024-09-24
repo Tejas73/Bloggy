@@ -13,6 +13,8 @@ interface UserFields {
     profile: ProfileFields
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const MyProfile = () => {
     
     const [userData, setUserData] = useState<UserFields | null>(null);// State to hold the user data fetched from the server
@@ -31,7 +33,6 @@ const MyProfile = () => {
     const [updatedBio, setUpdatedBio] = useState("");// Holds the updated bio value during editing    
     const [editBio, setEditBio] = useState(false);// Boolean state to control whether the bio input field is visible for editing
 
-    const origin = import.meta.env.VITE_ORIGIN;
     
     // Fetch user profile data when the component mounts or when fetchProfileData changes
     useEffect(() => {

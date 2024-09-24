@@ -36,9 +36,10 @@ interface BlogField {
     blogLikes: Array<BlogLikes>
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const BlogMenu: React.FC<BlogMenuProps> = ({ id, userId }) => {
     useAuth();
-    const origin = import.meta.env.VITE_ORIGIN;
 
     const navigate = useNavigate();
     const [myblogs, setMyblogs] = useRecoilState<BlogField[] | null>(currBlogState);

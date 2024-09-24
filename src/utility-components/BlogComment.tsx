@@ -31,6 +31,8 @@ interface BlogCommentsResponse {
     blogComments: Comment[];
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const BlogComment = () => {
     const { blogId } = useParams<{ blogId: string }>();
     const [comment, setComment] = useState(""); // to create a comment
@@ -41,7 +43,6 @@ const BlogComment = () => {
     const selectedComment = useRecoilValue(selectedCommentState);
     const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
-    const origin = import.meta.env.VITE_ORIGIN;
 
     console.log("authUserId: ", authUserId);
     console.log("thisUserId: ", thisUserId); 

@@ -7,6 +7,8 @@ import { useCookies } from "react-cookie";
 import { currUserId } from "@/store/atoms/isLoggedIn";
 import { useSetRecoilState } from "recoil";
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Signin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -14,8 +16,7 @@ const Signin = () => {
   const [_, setCookie] = useCookies(["jwt"]);
   const setAuthState = useSetRecoilState(currUserId);
   
-  const origin = import.meta.env.VITE_ORIGIN;
-  console.log("Origin:", origin);
+  // console.log("Origin:", origin);
   const handleSignin = async (event: React.FormEvent) => {
     event.preventDefault();
 

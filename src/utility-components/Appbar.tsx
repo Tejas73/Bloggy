@@ -8,10 +8,11 @@ import ProfileMenu from "./ProfileMenu";
 import axios from "axios";
 import { LogoBLoggy, Logout, WritePencil } from "@/ui/svg-elements";
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Appbar = () => {
     useAuth();
     const auth = useRecoilValue(isLoggedIn);
-    const origin = import.meta.env.VITE_ORIGIN;
 
     const navigate = useNavigate();
     const setAuth = useSetRecoilState(isLoggedIn);

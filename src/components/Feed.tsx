@@ -32,12 +32,13 @@ interface ShowFeed {
     showBlogs: Array<Blogs>
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Feed = () => {
     const [feed, setFeed] = useState<ShowFeed | null>(null);
     const authUserId = useRecoilValue(currUserId);
     const thisUserId = authUserId.userID;
     const navigate = useNavigate();
-    const origin = import.meta.env.VITE_ORIGIN;
     
     const currBlogs = async () => {
         try {
@@ -47,7 +48,8 @@ const Feed = () => {
         } catch (error) {
             console.error("Error fetching feed data: ", error);
         }
-    }
+    };
+
     useEffect(() => {
         currBlogs();
     }, []);

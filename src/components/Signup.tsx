@@ -5,12 +5,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookies] = useCookies(["jwt"]);
-  const origin = import.meta.env.VITE_ORIGIN;
   
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();

@@ -29,9 +29,10 @@ interface BlogField {
     blogLikes: Array<BlogLikes>
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const MyBlogs = () => {
     const [myblogs, setMyblogs] = useRecoilState<BlogField[] | null>(currBlogState);
-    const origin = import.meta.env.VITE_ORIGIN;
     
     useEffect(() => {
         const currBlogs = async () => {

@@ -9,11 +9,12 @@ interface OpenedBlogFields {
     description: string
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const Blog = () => {
     const { blogId } = useParams();
     const [openedBlog, setOpenedBlog] = useState<OpenedBlogFields | null>(null);
 
-    const origin = import.meta.env.VITE_ORIGIN;
 
     useEffect(() => {
         const getBlog = async () => {

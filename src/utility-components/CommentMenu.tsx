@@ -14,13 +14,14 @@ interface CommentMenuProps {
     comment:string;
 }
 
+const origin = import.meta.env.VITE_ORIGIN;
+
 const CommentMenu: React.FC<CommentMenuProps> = ({
     id,
     userId,
     comment
 }) => {
     useAuth();
-    const origin = import.meta.env.VITE_ORIGIN;
 
     const setSelectedCommentId = useSetRecoilState(selectedCommentIdState);
     const [comments, setComments] = useRecoilState(currCommentState); // currCommentState holds all the current blog comments

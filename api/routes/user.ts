@@ -267,4 +267,4 @@ router.get("/check", passport.authenticate('jwt', { session: false }), async (re
     res.status(200).json({ message: 'Authenticated', token, userId });
 });
 
-export default router;
+export default router; 
