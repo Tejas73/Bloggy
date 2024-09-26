@@ -1,5 +1,5 @@
 # Bloggy
-
+LIVE- https://bloggy-fe.onrender.com
 ## Goal
 
 The main objective of Bloggy is to provide a platform where users can create, share, and interact with blog posts. It aims to be a user-friendly and feature-rich blogging application that supports user authentication, blog creation, commenting, and more.
