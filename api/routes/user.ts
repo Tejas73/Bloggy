@@ -15,7 +15,8 @@ interface UserFields {
     profile: {
         name: string,
         bio: string
-    }
+    },
+    cacheStrategy: { ttl: number }
 }
 interface ProfileFields {
     name: string,
@@ -83,7 +84,8 @@ router.get("/myprofile", passport.authenticate('jwt', { session: false }), async
             profile: {
                 name: user.profile.name,
                 bio: user.profile.bio,
-            }
+            },
+            cacheStrategy: { ttl: 60 }
         }
         console.log(profileData)
         res.json(profileData);

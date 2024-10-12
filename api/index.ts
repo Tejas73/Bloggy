@@ -14,7 +14,7 @@ import prisma from './utils/prismaClient';
 passport.use(jwtStrategy);
 
 const app = express();
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
 // Middleware to parse cookies
 app.use(cookieParser());
@@ -41,11 +41,11 @@ app.use('/api/user', userRoute)
 app.use('/api/blog', blogRoute)
 app.use('/api/comment', commentRoute);
 
-console.log(process.env.ORIGIN);
+console.log("ORIGIN: ", process.env.ORIGIN);
 
 (async () => {
-    
-    const PORT = process.env.PORT || 3000; 
+
+    const PORT = process.env.PORT || 3000;
     await checkDatabaseConnection();
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);

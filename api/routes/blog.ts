@@ -60,6 +60,7 @@ router.get("/allblogs", passport.authenticate("jwt", { session: false }), async 
                 comments: true,
                 blogLikes: true 
             },
+            cacheStrategy: { ttl: 60 }
         });
 
         res.json({ message: "Fetching of all Blogs successful", showBlogs });
@@ -83,6 +84,7 @@ router.get("/myblogs", passport.authenticate("jwt", { session: false }), async (
                 comments: true,
                 blogLikes: true
             },
+            cacheStrategy: { ttl: 60 }
         });
 
         console.log("myblogs: ", myBlogs);
@@ -159,7 +161,8 @@ router.get("/feed/:blogId", passport.authenticate("jwt", { session: false }), as
         console.log(blogId);
 
         const singleBlog = await prisma.blog.findUnique({
-            where: { id: blogId }
+            where: { id: blogId },
+            cacheStrategy: { ttl: 60 }
         });
 
         console.log("reached in feed/blogId");

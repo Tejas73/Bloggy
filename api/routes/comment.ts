@@ -85,7 +85,8 @@ router.get("/showcomments/:blogId", passport.authenticate("jwt", { session: fals
                         userId: true
                     }
                 }
-            }
+            },
+            cacheStrategy: { ttl: 60 }
         });
         console.log("blogComments:", blogComments);
         res.status(200).json({ message: "Blog Comments fetched successfully", blogComments });
@@ -320,7 +321,8 @@ router.get("/allComments/user/:userId", passport.authenticate("jwt", { session: 
     try {
         const userComments = await prisma.comment.findMany({
             where: { userId },
-            include: { blog: true }
+            include: { blog: true },
+            cacheStrategy: { ttl: 60 }
         });
 
         res.status(200).json({ message: " User Comments fetched successfully", userComments });

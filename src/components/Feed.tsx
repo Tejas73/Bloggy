@@ -34,6 +34,8 @@ interface ShowFeed {
 
 const origin = import.meta.env.VITE_ORIGIN;
 
+//refactor like functionality so that when the user clicks on the like it updates first on the frontend then on the backend because as of now it is really slow
+
 const Feed = () => {
     const [feed, setFeed] = useState<ShowFeed | null>(null);
     const authUserId = useRecoilValue(currUserId);
